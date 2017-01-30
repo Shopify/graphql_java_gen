@@ -1,0 +1,4 @@
+/Gemfile.lock
+/pkg/
+/tmp/
+/support/src/test/java/com/shopify/graphql/support/Generated.java

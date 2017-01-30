@@ -1,0 +1,26 @@
+repositories {
+    jcenter()
+}
+
+apply plugin: 'java'
+
+dependencies {
+    compile 'com.google.code.gson:gson:2.7'
+    testCompile 'junit:junit:4.12'
+}
+
+compileJava {
+    sourceCompatibility = '1.7'
+    targetCompatibility = '1.7'
+}
+
+compileTestJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
