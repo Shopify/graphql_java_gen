@@ -13,7 +13,7 @@ the code generators ruby package.
 Until this project is released, it is recommended to include it into
 a project as a git submodule.
 
-    $ git submodule git@github.com:Shopify/graphql_java_gen.git
+    $ git submodule https://github.com/Shopify/graphql_java_gen.git
 
 Add this line to your application's Gemfile:
 
