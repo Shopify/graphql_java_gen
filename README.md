@@ -10,27 +10,21 @@ The code generator requires ruby version 2.1 or later.
 It is recommended to use [bundler](http://bundler.io/) to install
 the code generators ruby package.
 
-Until this project is released, it is recommended to include it into
-a project as a git submodule.
-
-    $ git submodule https://github.com/Shopify/graphql_java_gen.git
-
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'graphql_java_gen', path: 'graphql_java_gen'
+gem 'graphql_java_gen'
 ```
 
 And then execute:
 
     $ bundle
 
-The generated code depends on the com.shopify.graphql.support package
-which is in the support directory of this repo. Create a symlink to
-include that project in a [gradle multi-project build
-](https://docs.gradle.org/current/userguide/multi_project_builds.html)
+The generated code depends on the com.shopify.graphql.support java
+package. This can be added to a gradle project by adding the following
+jCenter dependancy to you `build.gradle` file:
 
-    $ ln -s graphql_java_gen/support GraphQLSupport
+    compile 'com.shopify.graphql.support:graphql-support:0.1.0'
 
 ## Usage
 

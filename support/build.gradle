@@ -1,8 +1,20 @@
+def VERSION_NAME = '0.1.0'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
 repositories {
     jcenter()
 }
 
 apply plugin: 'java'
+apply plugin: 'com.jfrog.bintray'
 
 dependencies {
     compile 'com.google.code.gson:gson:2.7'
@@ -22,5 +34,46 @@ compileTestJava {
 test {
     testLogging {
         exceptionFormat = 'full'
+    }
+}
+
+version = VERSION_NAME
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    /*
+    These values can be found on https://bintray.com/profile/edit
+    BINTRAY_USER : your personal profile name (from "Your Profile")
+    BINTRAY_KEY : found on the left menu, under "API Key"
+     */
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+
+    configurations = ['archives']
+    pkg {
+        userOrg = 'shopify'
+        repo = 'shopify-java'
+        name = 'graphql-support'
+        desc = 'GraphQL support package generated client code'
+        websiteUrl = 'https://github.com/Shopify/graphql_java_gen'
+        vcsUrl = 'https://github.com/Shopify/graphql_java_gen.git'
+        licenses = ['MIT']
+        version {
+            name = VERSION_NAME
+        }
     }
 }
