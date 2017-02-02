@@ -1,8 +1,21 @@
+def VERSION_NAME = '0.1.0'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
 repositories {
     jcenter()
 }
 
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.jfrog.bintray'
 
 dependencies {
     compile 'com.google.code.gson:gson:2.7'
@@ -22,5 +35,93 @@ compileTestJava {
 test {
     testLogging {
         exceptionFormat = 'full'
+    }
+}
+
+version = VERSION_NAME
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+ext {
+    publishedGroupId = 'com.shopify.graphql.support'
+    artifact = 'support'
+    libraryName = 'graphql-support'
+
+    libraryDescription = 'GraphQL support package generated client code'
+
+    siteUrl = 'https://github.com/Shopify/graphql_java_gen'
+    gitUrl = 'https://github.com/Shopify/graphql_java_gen.git'
+
+    licenseName = 'The MIT License'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
+group = publishedGroupId
+
+install {
+    repositories.mavenInstaller {
+        // Generates POM.xml with proper parameters
+        pom {
+            project {
+                groupId publishedGroupId
+                artifactId artifact
+
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    /*
+    These values can be found on https://bintray.com/profile/edit
+    BINTRAY_USER : your personal profile name (from "Your Profile")
+    BINTRAY_KEY : found on the left menu, under "API Key"
+     */
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+
+    configurations = ['archives']
+    publish = true
+    pkg {
+        userOrg = 'shopify'
+        repo = 'shopify-java'
+        name = libraryName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        version {
+            name = VERSION_NAME
+        }
     }
 }
