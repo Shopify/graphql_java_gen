@@ -14,6 +14,7 @@ repositories {
 }
 
 apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 dependencies {
@@ -54,6 +55,52 @@ artifacts {
     archives sourcesJar
 }
 
+ext {
+    publishedGroupId = 'com.shopify.graphql.support'
+    artifact = 'support'
+    libraryName = 'graphql-support'
+
+    libraryDescription = 'GraphQL support package generated client code'
+
+    siteUrl = 'https://github.com/Shopify/graphql_java_gen'
+    gitUrl = 'https://github.com/Shopify/graphql_java_gen.git'
+
+    licenseName = 'The MIT License'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
+group = publishedGroupId
+
+install {
+    repositories.mavenInstaller {
+        // Generates POM.xml with proper parameters
+        pom {
+            project {
+                groupId publishedGroupId
+                artifactId artifact
+
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
 bintray {
     /*
     These values can be found on https://bintray.com/profile/edit
@@ -64,14 +111,15 @@ bintray {
     key = System.getenv('BINTRAY_KEY')
 
     configurations = ['archives']
+    publish = true
     pkg {
         userOrg = 'shopify'
         repo = 'shopify-java'
-        name = 'graphql-support'
-        desc = 'GraphQL support package generated client code'
-        websiteUrl = 'https://github.com/Shopify/graphql_java_gen'
-        vcsUrl = 'https://github.com/Shopify/graphql_java_gen.git'
-        licenses = ['MIT']
+        name = libraryName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
         version {
             name = VERSION_NAME
         }
