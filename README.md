@@ -22,14 +22,9 @@ And then execute:
 
 The generated code depends on the com.shopify.graphql.support java
 package. This can be added to a gradle project by adding the following
-dependency to you `build.gradle` file:
+jCenter dependancy to you `build.gradle` file:
 
     compile 'com.shopify.graphql.support:support:0.1.0'
-
-currently will also need to add the bintray repository until the package
-is added to jcenter
-
-    maven { url 'https://dl.bintray.com/shopify/shopify-java/' }
 
 ## Usage
 
