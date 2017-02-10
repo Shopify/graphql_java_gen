@@ -1,4 +1,5 @@
 # GraphQLJavaGen
+[![Build Status](https://travis-ci.org/Shopify/graphql_java_gen.svg?branch=master)](https://travis-ci.org/Shopify/graphql_java_gen)
 
 Generate code for a specific GraphQL schema that provides query
 builders and response classes.
