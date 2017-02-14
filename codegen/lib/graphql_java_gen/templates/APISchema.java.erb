@@ -208,7 +208,9 @@ public class <%= schema_name %> {
                     <% end %>
                     <% type.fields.each do |field| %>
                       <% next unless field.type.unwrap.object? %>
-                      if (get<%= field.classify_name %>() != null) {
+                      <% unless field.type.non_null? %>
+                        if (get<%= field.classify_name %>() != null) {
+                      <% end %>
                         <% if field.type.unwrap_non_null.kind == 'LIST' %>
                             for (<%= java_output_type(field.type.unwrap) %> elem: get<%= field.classify_name %>()) {
                               children.addAll(elem.getNodes());
@@ -216,7 +218,9 @@ public class <%= schema_name %> {
                         <% else %>
                             children.addAll(get<%= field.classify_name %>().getNodes());
                         <% end %>
-                      }
+                      <% unless field.type.non_null? %>
+                        }
+                      <% end %>
                     <% end %>
                     return children;
                   }
