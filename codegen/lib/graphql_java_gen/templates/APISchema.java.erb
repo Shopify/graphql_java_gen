@@ -155,7 +155,11 @@ public class <%= schema_name %> {
             }
 
             <% unless type.object? %>
-                public interface <%= type.name %> {
+                <% if type.name == 'Node' %>
+                  public interface <%= type.name %> extends com.shopify.graphql.support.Node {
+                <% else %>
+                  public interface <%= type.name %> {
+                <% end %>
                     String getGraphQlTypeName();
                     <% type.fields.each do |field| %>
                         <%= java_output_type(field.type) %> get<%= field.classify_name %>();
@@ -201,8 +205,8 @@ public class <%= schema_name %> {
                 <% end %>
 
                 <% if type_names_set.include?('Node') %>
-                  public List<Node> getNodes() {
-                    List<Node> children = new ArrayList<>();
+                  public List<com.shopify.graphql.support.Node> getNodes() {
+                    List<com.shopify.graphql.support.Node> children = new ArrayList<>();
                     <% if type.object? && type.implement?("Node") %>
                       children.add(this);
                     <% end %>
