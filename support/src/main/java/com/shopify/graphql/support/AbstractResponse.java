@@ -5,7 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by dylansmith on 2015-11-23.
@@ -95,6 +97,10 @@ public abstract class AbstractResponse<T extends AbstractResponse> implements Se
             throw new SchemaViolationError(this, field, element);
         }
         return element.getAsJsonArray();
+    }
+
+    public List<Node> getNodes() {
+        return new ArrayList<>();
     }
 
     public abstract boolean unwrapsToObject(String key);
