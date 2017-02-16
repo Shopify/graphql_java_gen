@@ -161,6 +161,7 @@ public class <%= schema_name %> {
                   public interface <%= type.name %> {
                 <% end %>
                     String getGraphQlTypeName();
+                    AbstractResponse self();
                     <% type.fields.each do |field| %>
                         <%= java_output_type(field.type) %> get<%= field.classify_name %>();
                     <% end %>
@@ -211,14 +212,14 @@ public class <%= schema_name %> {
                       children.add(this);
                     <% end %>
                     <% type.fields.each do |field| %>
-                      <% next unless field.type.unwrap.object? %>
+                      <% next unless field.type.unwrap.object? || field.type.unwrap.interface? %>
                       if (get<%= field.classify_name %>() != null) {
                         <% if field.type.unwrap_non_null.kind == 'LIST' %>
                             for (<%= java_output_type(field.type.unwrap) %> elem: get<%= field.classify_name %>()) {
-                              children.addAll(elem.getNodes());
+                              children.addAll(elem.self().getNodes());
                             }
                         <% else %>
-                            children.addAll(get<%= field.classify_name %>().getNodes());
+                            children.addAll(get<%= field.classify_name %>().self().getNodes());
                         <% end %>
                       }
                     <% end %>
