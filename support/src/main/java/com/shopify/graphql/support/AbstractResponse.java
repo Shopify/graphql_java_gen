@@ -103,5 +103,9 @@ public abstract class AbstractResponse<T extends AbstractResponse> implements Se
         return new ArrayList<>();
     }
 
+    public AbstractResponse self() {
+        return this;
+    }
+
     public abstract boolean unwrapsToObject(String key);
 }
