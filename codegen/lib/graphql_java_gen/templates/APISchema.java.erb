@@ -242,7 +242,7 @@ public class <%= schema_name %> {
                 <% end %>
 
                   public boolean unwrapsToObject(String key) {
-                    switch (key) {
+                    switch (getFieldName(key)) {
                       <% type.fields.each do |field| %>
                         case "<%= field.name %>": return <%= field.type.unwrap.object? %>;
                       <% end %>
