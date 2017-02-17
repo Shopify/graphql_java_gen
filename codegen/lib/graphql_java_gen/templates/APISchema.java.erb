@@ -204,28 +204,6 @@ public class <%= schema_name %> {
                     }
                 <% end %>
 
-                <% if type_names_set.include?('Node') %>
-                  public List<com.shopify.graphql.support.Node> getNodes() {
-                    List<com.shopify.graphql.support.Node> children = new ArrayList<>();
-                    <% if type.object? && type.implement?("Node") %>
-                      children.add(this);
-                    <% end %>
-                    <% type.fields.each do |field| %>
-                      <% next unless field.type.unwrap.object? %>
-                      if (get<%= field.classify_name %>() != null) {
-                        <% if field.type.unwrap_non_null.kind == 'LIST' %>
-                            for (<%= java_output_type(field.type.unwrap) %> elem: get<%= field.classify_name %>()) {
-                              children.addAll(elem.getNodes());
-                            }
-                        <% else %>
-                            children.addAll(get<%= field.classify_name %>().getNodes());
-                        <% end %>
-                      }
-                    <% end %>
-                    return children;
-                  }
-                <% end %>
-
                 <% if type.object? %>
                     public String getGraphQlTypeName() {
                         return "<%= type.name %>";

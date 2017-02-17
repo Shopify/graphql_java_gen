@@ -100,7 +100,29 @@ public abstract class AbstractResponse<T extends AbstractResponse> implements Se
     }
 
     public List<Node> getNodes() {
-        return new ArrayList<>();
+        final ArrayList<Node> children = new ArrayList<>();
+
+        collectNodes(this, children);
+
+        return children;
+    }
+
+    private static void collectNodes(Object o, List<Node> collection) {
+        if (o instanceof AbstractResponse) {
+            final AbstractResponse response = (AbstractResponse) o;
+
+            if (response instanceof Node) {
+                collection.add((Node) response);
+            }
+
+            for (Object key : response.responseData.keySet()) {
+                collectNodes(response.get((String) key), collection);
+            }
+        } else if (o instanceof List) {
+            for (Object element : (List) o) {
+                collectNodes(element, collection);
+            }
+        }
     }
 
     public abstract boolean unwrapsToObject(String key);
