@@ -236,7 +236,7 @@ public class <%= schema_name %> {
 
                     <% next if field.name == "id" && type.object? && type.implement?("Node") %>
                     public <%= class_name %> set<%= field.classify_name %>(<%= java_output_type(field.type) %> arg) {
-                      optimisticData.put("<%= field.name %>", arg);
+                      optimisticData.put(getKey("<%= field.name %>"), arg);
                       return this;
                     }
                 <% end %>
