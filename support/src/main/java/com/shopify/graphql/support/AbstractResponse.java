@@ -34,15 +34,11 @@ public abstract class AbstractResponse<T extends AbstractResponse> implements Se
     }
 
     public Object get(String field) {
-        if (aliasSuffix != null) {
-            field += Query.ALIAS_SUFFIX_SEPARATOR + aliasSuffix;
-            aliasSuffix = null;
+        String key = getKey(field);
+        if (optimisticData.containsKey(key)) {
+            return optimisticData.get(key);
         }
-
-        if (optimisticData.containsKey(field)) {
-            return optimisticData.get(field);
-        }
-        return responseData.get(field);
+        return responseData.get(key);
     }
 
     protected String getFieldName(String key) {
@@ -51,6 +47,14 @@ public abstract class AbstractResponse<T extends AbstractResponse> implements Se
             key = key.substring(0, i);
         }
         return key;
+    }
+
+    protected String getKey(String field) {
+        if (aliasSuffix != null) {
+            field += Query.ALIAS_SUFFIX_SEPARATOR + aliasSuffix;
+            aliasSuffix = null;
+        }
+        return field;
     }
 
     protected String jsonAsString(JsonElement element, String field) throws SchemaViolationError {

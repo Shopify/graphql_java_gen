@@ -212,7 +212,7 @@ public class Generated {
         }
 
         public UnknownEntry setKey(String arg) {
-            optimisticData.put("key", arg);
+            optimisticData.put(getKey("key"), arg);
             return this;
         }
 
@@ -221,7 +221,7 @@ public class Generated {
         }
 
         public UnknownEntry setTtl(LocalDateTime arg) {
-            optimisticData.put("ttl", arg);
+            optimisticData.put(getKey("ttl"), arg);
             return this;
         }
 
@@ -316,7 +316,7 @@ public class Generated {
         }
 
         public IntegerEntry setKey(String arg) {
-            optimisticData.put("key", arg);
+            optimisticData.put(getKey("key"), arg);
             return this;
         }
 
@@ -325,7 +325,7 @@ public class Generated {
         }
 
         public IntegerEntry setTtl(LocalDateTime arg) {
-            optimisticData.put("ttl", arg);
+            optimisticData.put(getKey("ttl"), arg);
             return this;
         }
 
@@ -334,7 +334,7 @@ public class Generated {
         }
 
         public IntegerEntry setValue(Integer arg) {
-            optimisticData.put("value", arg);
+            optimisticData.put(getKey("value"), arg);
             return this;
         }
 
@@ -515,7 +515,7 @@ public class Generated {
         }
 
         public Mutation setSetInteger(Boolean arg) {
-            optimisticData.put("set_integer", arg);
+            optimisticData.put(getKey("set_integer"), arg);
             return this;
         }
 
@@ -524,7 +524,7 @@ public class Generated {
         }
 
         public Mutation setSetString(Boolean arg) {
-            optimisticData.put("set_string", arg);
+            optimisticData.put(getKey("set_string"), arg);
             return this;
         }
 
@@ -533,7 +533,7 @@ public class Generated {
         }
 
         public Mutation setSetStringWithDefault(Boolean arg) {
-            optimisticData.put("set_string_with_default", arg);
+            optimisticData.put(getKey("set_string_with_default"), arg);
             return this;
         }
 
@@ -828,7 +828,7 @@ public class Generated {
         }
 
         public QueryRoot setEntries(List<Entry> arg) {
-            optimisticData.put("entries", arg);
+            optimisticData.put(getKey("entries"), arg);
             return this;
         }
 
@@ -837,7 +837,7 @@ public class Generated {
         }
 
         public QueryRoot setEntry(Entry arg) {
-            optimisticData.put("entry", arg);
+            optimisticData.put(getKey("entry"), arg);
             return this;
         }
 
@@ -846,7 +846,7 @@ public class Generated {
         }
 
         public QueryRoot setInteger(Integer arg) {
-            optimisticData.put("integer", arg);
+            optimisticData.put(getKey("integer"), arg);
             return this;
         }
 
@@ -855,7 +855,7 @@ public class Generated {
         }
 
         public QueryRoot setKeys(List<String> arg) {
-            optimisticData.put("keys", arg);
+            optimisticData.put(getKey("keys"), arg);
             return this;
         }
 
@@ -864,7 +864,7 @@ public class Generated {
         }
 
         public QueryRoot setString(String arg) {
-            optimisticData.put("string", arg);
+            optimisticData.put(getKey("string"), arg);
             return this;
         }
 
@@ -873,7 +873,7 @@ public class Generated {
         }
 
         public QueryRoot setTtl(LocalDateTime arg) {
-            optimisticData.put("ttl", arg);
+            optimisticData.put(getKey("ttl"), arg);
             return this;
         }
 
@@ -882,7 +882,7 @@ public class Generated {
         }
 
         public QueryRoot setType(KeyType arg) {
-            optimisticData.put("type", arg);
+            optimisticData.put(getKey("type"), arg);
             return this;
         }
 
@@ -891,7 +891,7 @@ public class Generated {
         }
 
         public QueryRoot setVersion(String arg) {
-            optimisticData.put("version", arg);
+            optimisticData.put(getKey("version"), arg);
             return this;
         }
 
@@ -923,9 +923,9 @@ public class Generated {
 
         private int value;
 
-        private LocalDateTime ttl;
-
         private Boolean negate;
+
+        private LocalDateTime ttl;
 
         public SetIntegerInput(String key, int value) {
             this.key = key;
@@ -951,21 +951,21 @@ public class Generated {
             return this;
         }
 
-        public LocalDateTime getTtl() {
-            return ttl;
-        }
-
-        public SetIntegerInput setTtl(LocalDateTime ttl) {
-            this.ttl = ttl;
-            return this;
-        }
-
         public Boolean getNegate() {
             return negate;
         }
 
         public SetIntegerInput setNegate(Boolean negate) {
             this.negate = negate;
+            return this;
+        }
+
+        public LocalDateTime getTtl() {
+            return ttl;
+        }
+
+        public SetIntegerInput setTtl(LocalDateTime ttl) {
+            this.ttl = ttl;
             return this;
         }
 
@@ -983,18 +983,18 @@ public class Generated {
             _queryBuilder.append("value:");
             _queryBuilder.append(value);
 
-            if (ttl != null) {
-                _queryBuilder.append(separator);
-                separator = ",";
-                _queryBuilder.append("ttl:");
-                Query.appendQuotedString(_queryBuilder, ttl.toString());
-            }
-
             if (negate != null) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("negate:");
                 _queryBuilder.append(negate);
+            }
+
+            if (ttl != null) {
+                _queryBuilder.append(separator);
+                separator = ",";
+                _queryBuilder.append("ttl:");
+                Query.appendQuotedString(_queryBuilder, ttl.toString());
             }
 
             _queryBuilder.append('}');
@@ -1081,7 +1081,7 @@ public class Generated {
         }
 
         public StringEntry setKey(String arg) {
-            optimisticData.put("key", arg);
+            optimisticData.put(getKey("key"), arg);
             return this;
         }
 
@@ -1090,7 +1090,7 @@ public class Generated {
         }
 
         public StringEntry setTtl(LocalDateTime arg) {
-            optimisticData.put("ttl", arg);
+            optimisticData.put(getKey("ttl"), arg);
             return this;
         }
 
@@ -1099,7 +1099,7 @@ public class Generated {
         }
 
         public StringEntry setValue(String arg) {
-            optimisticData.put("value", arg);
+            optimisticData.put(getKey("value"), arg);
             return this;
         }
 
