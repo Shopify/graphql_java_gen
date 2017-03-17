@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class <%= schema_name %> {
     <% [[:query, schema.query_root_name], [:mutation, schema.mutation_root_name]].each do |operation_type, root_name| %>
-        <% next unless schema.mutation_root_name %>
+        <% next unless root_name %>
         public static <%= root_name %>Query <%= operation_type %>(<%= root_name %>QueryDefinition queryDef) {
             StringBuilder queryString = new StringBuilder("<%= operation_type unless operation_type == :query %>{");
             <%= root_name %>Query query = new <%= root_name %>Query(queryString);
