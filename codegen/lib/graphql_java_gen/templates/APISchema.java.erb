@@ -67,6 +67,7 @@ public class <%= schema_name %> {
 
     <% schema.types.reject{ |type| type.name.start_with?('__') || type.scalar? }.each do |type| %>
         <% case type.kind when 'OBJECT', 'INTERFACE', 'UNION' %>
+            <% fields = type.fields || [] %>
             public interface <%= type.name %>QueryDefinition {
                 void define(<%= type.name %>Query _queryBuilder);
             }
@@ -82,7 +83,7 @@ public class <%= schema_name %> {
                     <% end %>
                 }
 
-                <% type.fields.each do |field| %>
+                <% fields.each do |field| %>
                     <% next if field.name == "id" && type.object? && type.implement?("Node") %>
                     <% unless field.optional_args.empty? %>
                         public class <%= field.classify_name %>Arguments extends Arguments {
@@ -161,7 +162,7 @@ public class <%= schema_name %> {
                   public interface <%= type.name %> {
                 <% end %>
                     String getGraphQlTypeName();
-                    <% type.fields.each do |field| %>
+                    <% fields.each do |field| %>
                         <%= java_output_type(field.type) %> get<%= field.classify_name %>();
                     <% end %>
                 }
@@ -177,7 +178,7 @@ public class <%= schema_name %> {
                     String key = field.getKey();
                     String fieldName = getFieldName(key);
                     switch (fieldName) {
-                      <% type.fields.each do |field| %>
+                      <% fields.each do |field| %>
                         case "<%= field.name %>": {
                           <% generate_build_output_code("field.getValue()", field.type) do |statements, expr| %>
                             <%= statements %>
@@ -228,7 +229,7 @@ public class <%= schema_name %> {
                     }
                 <% end %>
 
-                <% type.fields.each do |field| %>
+                <% fields.each do |field| %>
                     <%= java_annotations(field) %>
                     public <%= java_output_type(field.type) %> get<%= field.classify_name %>() {
                       return (<%= java_output_type(field.type) %>) get("<%= field.name %>");
@@ -243,7 +244,7 @@ public class <%= schema_name %> {
 
                   public boolean unwrapsToObject(String key) {
                     switch (getFieldName(key)) {
-                      <% type.fields.each do |field| %>
+                      <% fields.each do |field| %>
                         case "<%= field.name %>": return <%= field.type.unwrap.object? %>;
                       <% end %>
                       default: return false;
