@@ -7,5 +7,5 @@ require 'minitest/autorun'
 
 require 'support/schema'
 
-SIMPLE_SCHEMA = GraphQLSchema.new(Support::Schema.introspection_result(Support::Schema::NoMutationSchema))
+MINIMAL_SCHEMA = GraphQLSchema.new(Support::Schema.introspection_result(Support::Schema::MinimalSchema))
 LARGER_SCHEMA = GraphQLSchema.new(Support::Schema.introspection_result)

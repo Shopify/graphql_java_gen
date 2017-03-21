@@ -111,9 +111,14 @@ module Support
       resolve_type ->(obj, ctx) {}
     end
 
-    NoMutationSchema = GraphQL::Schema.define do
-      query QueryType
-      orphan_types [StringEntryType, IntegerEntryType]
+    MinimalQueryType = GraphQL::ObjectType.define do
+      name "QueryRoot"
+
+      field :version, types.String
+    end
+
+    MinimalSchema = GraphQL::Schema.define do
+      query MinimalQueryType
       resolve_type ->(obj, ctx) {}
     end
 

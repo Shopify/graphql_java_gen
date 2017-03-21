@@ -14,8 +14,8 @@ task :generate do
   require 'graphql_java_gen'
   require_relative 'codegen/test/support/schema'
 
-  schema = GraphQLSchema.new(Support::Schema.introspection_result)
-  generator = GraphQLJavaGen.new(schema,
+  GraphQLJavaGen.new(
+    GraphQLSchema.new(Support::Schema.introspection_result),
     package_name: 'com.shopify.graphql.support',
     nest_under: 'Generated',
     custom_scalars: [
@@ -26,8 +26,13 @@ task :generate do
         imports: ['java.time.LocalDateTime'],
       )
     ]
-  )
-  generator.save('support/src/test/java/com/shopify/graphql/support/Generated.java')
+  ).save('support/src/test/java/com/shopify/graphql/support/Generated.java')
+
+  GraphQLJavaGen.new(
+    GraphQLSchema.new(Support::Schema.introspection_result(Support::Schema::MinimalSchema)),
+    package_name: 'com.shopify.graphql.support',
+    nest_under: 'GeneratedMinimal',
+  ).save('support/src/test/java/com/shopify/graphql/support/GeneratedMinimal.java')
 end
 
 task :default => :test
