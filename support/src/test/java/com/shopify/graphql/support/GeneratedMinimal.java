@@ -121,7 +121,7 @@ public class GeneratedMinimal {
         }
 
         public QueryRoot setVersion(String arg) {
-            optimisticData.put("version", arg);
+            optimisticData.put(getKey("version"), arg);
             return this;
         }
 

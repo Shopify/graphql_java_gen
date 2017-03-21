@@ -923,9 +923,9 @@ public class Generated {
 
         private int value;
 
-        private Boolean negate;
-
         private LocalDateTime ttl;
+
+        private Boolean negate;
 
         public SetIntegerInput(String key, int value) {
             this.key = key;
@@ -951,21 +951,21 @@ public class Generated {
             return this;
         }
 
-        public Boolean getNegate() {
-            return negate;
-        }
-
-        public SetIntegerInput setNegate(Boolean negate) {
-            this.negate = negate;
-            return this;
-        }
-
         public LocalDateTime getTtl() {
             return ttl;
         }
 
         public SetIntegerInput setTtl(LocalDateTime ttl) {
             this.ttl = ttl;
+            return this;
+        }
+
+        public Boolean getNegate() {
+            return negate;
+        }
+
+        public SetIntegerInput setNegate(Boolean negate) {
+            this.negate = negate;
             return this;
         }
 
@@ -983,18 +983,18 @@ public class Generated {
             _queryBuilder.append("value:");
             _queryBuilder.append(value);
 
-            if (negate != null) {
-                _queryBuilder.append(separator);
-                separator = ",";
-                _queryBuilder.append("negate:");
-                _queryBuilder.append(negate);
-            }
-
             if (ttl != null) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("ttl:");
                 Query.appendQuotedString(_queryBuilder, ttl.toString());
+            }
+
+            if (negate != null) {
+                _queryBuilder.append(separator);
+                separator = ",";
+                _queryBuilder.append("negate:");
+                _queryBuilder.append(negate);
             }
 
             _queryBuilder.append('}');
