@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class IntegrationTest {
     @Test
     public void testStringFieldQuery() throws Exception {
-        String queryString = Generated.query(query -> query.version()).toString();
+        String queryString = GeneratedMinimal.query(query -> query.version()).toString();
         assertEquals("{version}", queryString);
     }
 
@@ -73,7 +73,7 @@ public class IntegrationTest {
     @Test
     public void testStringFieldResponse() throws Exception {
         String json = "{\"data\":{\"version\":\"1.2.3\"}}";
-        Generated.QueryRoot data = Generated.QueryResponse.fromJson(json).getData();
+        GeneratedMinimal.QueryRoot data = GeneratedMinimal.QueryResponse.fromJson(json).getData();
         assertEquals("1.2.3", data.getVersion());
     }
 

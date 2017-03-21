@@ -6,12 +6,12 @@ class GraphQLJavaGenTest < Minitest::Test
   end
 
   def test_default_script_name
-    output = GraphQLJavaGen.new(SIMPLE_SCHEMA, **required_args).generate
+    output = GraphQLJavaGen.new(MINIMAL_SCHEMA, **required_args).generate
     assert_match %r{\A// Generated from graphql_java_gen gem$}, output
   end
 
   def test_script_name_option
-    output = GraphQLJavaGen.new(SIMPLE_SCHEMA, script_name: 'script/update_schema', **required_args).generate
+    output = GraphQLJavaGen.new(MINIMAL_SCHEMA, script_name: 'script/update_schema', **required_args).generate
     assert_match %r{\A// Generated from script/update_schema$}, output
   end
 
