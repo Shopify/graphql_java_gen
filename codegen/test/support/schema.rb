@@ -38,6 +38,11 @@ module Support
       field :ttl, TimeType
     end
 
+    EntryUnionType = GraphQL::UnionType.define do
+      name "EntryUnion"
+      possible_types [StringEntryType, IntegerEntryType]
+    end
+
     QueryType = GraphQL::ObjectType.define do
       name "QueryRoot"
 
@@ -57,6 +62,10 @@ module Support
       end
       field :entry, EntryType do
         description "Get an entry of any type with the given key"
+        argument :key, !types.String
+      end
+      field :entry_union, EntryUnionType do
+        description "Get an entry of any type with the given key as a union"
         argument :key, !types.String
       end
       field :type, KeyType do

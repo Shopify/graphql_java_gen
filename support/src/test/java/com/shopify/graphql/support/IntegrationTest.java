@@ -40,6 +40,16 @@ public class IntegrationTest {
     }
 
     @Test
+    public void testUnionQuery() throws Exception {
+        String queryString = Generated.query(query ->
+            query.entryUnion("user:1", entry -> entry
+                .onStringEntry(strEntry -> strEntry.value())
+            )
+        ).toString();
+        assertEquals("{entry_union(key:\"user:1\"){__typename,... on StringEntry{value}}}", queryString);
+    }
+
+    @Test
     public void testEnumInput() throws Exception {
         String queryString = Generated.query(query -> query
             .keys(10, args -> args.type(Generated.KeyType.INTEGER))
@@ -121,6 +131,23 @@ public class IntegrationTest {
         assertEquals("FutureEntry", entry.getGraphQlTypeName());
         assertTrue(entry instanceof Generated.UnknownEntry);
         assertEquals("foo", entry.getKey());
+    }
+
+    @Test
+    public void testUnionResponse() throws Exception {
+        String json = "{\"data\":{\"entry_union\":{\"__typename\":\"IntegerEntry\",\"value\":42}}}";
+        Generated.EntryUnion entry = Generated.QueryResponse.fromJson(json).getData().getEntryUnion();
+        assertEquals("IntegerEntry", entry.getGraphQlTypeName());
+        assertTrue(entry instanceof Generated.IntegerEntry);
+        assertEquals(42, ((Generated.IntegerEntry) entry).getValue().intValue());
+    }
+
+    @Test
+    public void testUnionUnknownTypeResponse() throws Exception {
+        String json = "{\"data\":{\"entry_union\":{\"__typename\":\"FutureEntry\"}}}";
+        Generated.EntryUnion entry = Generated.QueryResponse.fromJson(json).getData().getEntryUnion();
+        assertEquals("FutureEntry", entry.getGraphQlTypeName());
+        assertTrue(entry instanceof Generated.UnknownEntryUnion);
     }
 
     @Test

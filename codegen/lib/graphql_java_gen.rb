@@ -247,8 +247,9 @@ class GraphQLJavaGen
 
   def java_implements(type)
     return "implements #{type.name} " unless type.object?
-    return "" if type.interfaces.empty?
-    "implements #{type.interfaces.map{ |interface| interface.name }.join(', ')} "
+    interfaces = abstract_types.fetch(type.name)
+    return "" if interfaces.empty?
+    "implements #{interfaces.to_a.join(', ')} "
   end
 
   def java_annotations(field)
@@ -259,5 +260,18 @@ class GraphQLJavaGen
 
   def type_names_set
     @type_names_set ||= schema.types.map(&:name).to_set
+  end
+
+  def abstract_types
+    @abstract_types ||= schema.types.each_with_object({}) do |type, result|
+      case type.kind
+      when 'OBJECT'
+        result[type.name] ||= Set.new
+      when 'INTERFACE', 'UNION'
+        type.possible_types.each do |possible_type|
+          (result[possible_type.name] ||= Set.new).add(type.name)
+        end
+      end
+    end
   end
 end

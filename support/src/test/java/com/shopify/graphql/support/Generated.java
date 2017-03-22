@@ -236,6 +236,84 @@ public class Generated {
         }
     }
 
+    public interface EntryUnionQueryDefinition {
+        void define(EntryUnionQuery _queryBuilder);
+    }
+
+    public static class EntryUnionQuery extends Query<EntryUnionQuery> {
+        EntryUnionQuery(StringBuilder _queryBuilder) {
+            super(_queryBuilder);
+
+            startField("__typename");
+        }
+
+        public EntryUnionQuery onIntegerEntry(IntegerEntryQueryDefinition queryDef) {
+            startInlineFragment("IntegerEntry");
+            queryDef.define(new IntegerEntryQuery(_queryBuilder));
+            _queryBuilder.append('}');
+            return this;
+        }
+
+        public EntryUnionQuery onStringEntry(StringEntryQueryDefinition queryDef) {
+            startInlineFragment("StringEntry");
+            queryDef.define(new StringEntryQuery(_queryBuilder));
+            _queryBuilder.append('}');
+            return this;
+        }
+    }
+
+    public interface EntryUnion {
+        String getGraphQlTypeName();
+    }
+
+    public static class UnknownEntryUnion extends AbstractResponse<UnknownEntryUnion> implements EntryUnion {
+        public UnknownEntryUnion() {
+        }
+
+        public UnknownEntryUnion(JsonObject fields) throws SchemaViolationError {
+            for (Map.Entry<String, JsonElement> field : fields.entrySet()) {
+                String key = field.getKey();
+                String fieldName = getFieldName(key);
+                switch (fieldName) {
+                    case "__typename": {
+                        responseData.put(key, jsonAsString(field.getValue(), key));
+                        break;
+                    }
+                    default: {
+                        throw new SchemaViolationError(this, key, field.getValue());
+                    }
+                }
+            }
+        }
+
+        public static EntryUnion create(JsonObject fields) throws SchemaViolationError {
+            String typeName = fields.getAsJsonPrimitive("__typename").getAsString();
+            switch (typeName) {
+                case "IntegerEntry": {
+                    return new IntegerEntry(fields);
+                }
+
+                case "StringEntry": {
+                    return new StringEntry(fields);
+                }
+
+                default: {
+                    return new UnknownEntryUnion(fields);
+                }
+            }
+        }
+
+        public String getGraphQlTypeName() {
+            return (String) get("__typename");
+        }
+
+        public boolean unwrapsToObject(String key) {
+            switch (getFieldName(key)) {
+                default: return false;
+            }
+        }
+    }
+
     public interface IntegerEntryQueryDefinition {
         void define(IntegerEntryQuery _queryBuilder);
     }
@@ -264,7 +342,7 @@ public class Generated {
         }
     }
 
-    public static class IntegerEntry extends AbstractResponse<IntegerEntry> implements Entry {
+    public static class IntegerEntry extends AbstractResponse<IntegerEntry> implements Entry, EntryUnion {
         public IntegerEntry() {
         }
 
@@ -613,6 +691,21 @@ public class Generated {
             return this;
         }
 
+        public QueryRootQuery entryUnion(String key, EntryUnionQueryDefinition queryDef) {
+            startField("entry_union");
+
+            _queryBuilder.append("(key:");
+            Query.appendQuotedString(_queryBuilder, key.toString());
+
+            _queryBuilder.append(')');
+
+            _queryBuilder.append('{');
+            queryDef.define(new EntryUnionQuery(_queryBuilder));
+            _queryBuilder.append('}');
+
+            return this;
+        }
+
         public QueryRootQuery integer(String key) {
             startField("integer");
 
@@ -742,6 +835,17 @@ public class Generated {
                         break;
                     }
 
+                    case "entry_union": {
+                        EntryUnion optional1 = null;
+                        if (!field.getValue().isJsonNull()) {
+                            optional1 = UnknownEntryUnion.create(jsonAsObject(field.getValue(), key));
+                        }
+
+                        responseData.put(key, optional1);
+
+                        break;
+                    }
+
                     case "integer": {
                         Integer optional1 = null;
                         if (!field.getValue().isJsonNull()) {
@@ -841,6 +945,15 @@ public class Generated {
             return this;
         }
 
+        public EntryUnion getEntryUnion() {
+            return (EntryUnion) get("entry_union");
+        }
+
+        public QueryRoot setEntryUnion(EntryUnion arg) {
+            optimisticData.put(getKey("entry_union"), arg);
+            return this;
+        }
+
         public Integer getInteger() {
             return (Integer) get("integer");
         }
@@ -900,6 +1013,8 @@ public class Generated {
                 case "entries": return false;
 
                 case "entry": return false;
+
+                case "entry_union": return false;
 
                 case "integer": return false;
 
@@ -1029,7 +1144,7 @@ public class Generated {
         }
     }
 
-    public static class StringEntry extends AbstractResponse<StringEntry> implements Entry {
+    public static class StringEntry extends AbstractResponse<StringEntry> implements Entry, EntryUnion {
         public StringEntry() {
         }
 
