@@ -277,8 +277,8 @@ class GraphQLJavaGen
 
   def java_doc(element)
     doc = ''
-    unless element.description.nil? || element.description == 0
-      description = element.description.gsub("\n", '')
+    unless element.description.nil?
+      description = element.description.gsub("\n", ' ').gsub(/\s+/, ' ')
       description = wrap_text(description, 100)
       description = description.chomp("\n").gsub("\n", "\n* ")
       doc << "/**\n"

@@ -235,8 +235,8 @@ public class <%= schema_name %> {
                 <% end %>
 
                 <% fields.each do |field| %>
-                    <%= java_annotations(field) %>
                     <%= java_doc(field) %>
+                    <%= java_annotations(field) %>
                     public <%= java_output_type(field.type) %> get<%= field.classify_name %>() {
                       return (<%= java_output_type(field.type) %>) get("<%= field.name %>");
                     }
