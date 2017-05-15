@@ -72,6 +72,7 @@ public class <%= schema_name %> {
                 void define(<%= type.name %>Query _queryBuilder);
             }
 
+            <%= java_doc(type) %>
             public static class <%= type.name %>Query extends Query<<%= type.name %>Query> {
                 <%= type.name %>Query(StringBuilder _queryBuilder) {
                     super(_queryBuilder);
@@ -92,6 +93,7 @@ public class <%= schema_name %> {
                             }
 
                             <% field.optional_args.each do |arg| %>
+                                <%= java_doc(arg) %>
                                 public <%= field.classify_name %>Arguments <%= escape_reserved_word(arg.camelize_name) %>(<%= java_input_type(arg.type) %> value) {
                                     if (value != null) {
                                         startArgument("<%= arg.name %>");
@@ -106,11 +108,13 @@ public class <%= schema_name %> {
                             void define(<%= field.classify_name %>Arguments args);
                         }
 
+                        <%= java_doc(field) %>
                         public <%= type.name %>Query <%= escape_reserved_word(field.camelize_name) %>(<%= java_arg_defs(field, skip_optional: true) %>) {
                             return <%= escape_reserved_word(field.camelize_name) %>(<%= java_arg_expresions_with_empty_optional_args(field) %>);
                         }
                     <% end %>
 
+                    <%= java_doc(field) %>
                     public <%= type.name %>Query <%= escape_reserved_word(field.camelize_name) %>(<%= java_arg_defs(field) %>) {
                         startField("<%= field.name %>");
                         <% unless field.args.empty? %>
@@ -169,6 +173,7 @@ public class <%= schema_name %> {
             <% end %>
 
             <% class_name = type.object? ? type.name : "Unknown#{type.name}" %>
+            <%= java_doc(type) %>
             public static class <%= class_name %> extends AbstractResponse<<%= class_name %>> <%= java_implements(type) %>{
                 public <%= class_name %>() {
                 }
@@ -231,6 +236,7 @@ public class <%= schema_name %> {
 
                 <% fields.each do |field| %>
                     <%= java_annotations(field) %>
+                    <%= java_doc(field) %>
                     public <%= java_output_type(field.type) %> get<%= field.classify_name %>() {
                       return (<%= java_output_type(field.type) %>) get("<%= field.name %>");
                     }
@@ -310,6 +316,7 @@ public class <%= schema_name %> {
                 }
             }
         <% when 'ENUM' %>
+            <%= java_doc(type) %>
             public enum <%= type.name %> {
               <% type.enum_values.each do |value| %>
                 <%= value.upcase_name %>,
