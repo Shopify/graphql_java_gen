@@ -280,7 +280,7 @@ class GraphQLJavaGen
     unless element.description.nil?
       description = wrap_text(element.description, 100)
       description = format_java_doc_list(description)
-      description = description.chomp("\n").gsub("\n", "\n*")
+      description = description.chomp("\n").gsub("\n", "\n* ")
       doc << "/**\n"
       doc << '* '
       doc << description
@@ -299,7 +299,7 @@ class GraphQLJavaGen
     parts = text.split(':')
     list_pattern = /\s*?-\s*?`(.+?)`\s*?/
     if parts.count > 1 && list_pattern.match(parts.last)
-      parts.first + ":\n <ul>" + parts.last.gsub(list_pattern, "\n" + ' <li>\1</li>') + ' </ul>'
+      parts.first + ":\n<ul>" + parts.last.gsub(list_pattern, "\n" + ' <li>\1</li>') + '</ul>'
     else
       text
     end
