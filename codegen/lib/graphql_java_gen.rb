@@ -278,9 +278,10 @@ class GraphQLJavaGen
   def java_doc(element)
     doc = ''
     unless element.description.nil?
-      description = wrap_text(element.description, 100)
-      description = description.chomp("\n").gsub("\n", "\n* ")
+      description = element.description.gsub("\n", ' ').gsub(/\s+/, ' ')
+      description = wrap_text(description, 100)
       description = format_java_doc_list(description)
+      description = description.chomp("\n").gsub("\n", "\n* ")
       doc << "/**\n"
       doc << '* '
       doc << description
@@ -290,8 +291,8 @@ class GraphQLJavaGen
   end
 
   def wrap_text(text, col_width=80)
-    text.gsub!(/(\S{#{col_width}})(?=\S)/, '\1 ')
-    text.gsub!(/(.{1,#{col_width}})(?:\s+|$)/, "\\1\n")
+    text.gsub!( /(\S{#{col_width}})(?=\S)/, '\1 ' )
+    text.gsub!( /(.{1,#{col_width}})(?:\s+|$)/, "\\1\n" )
     text
   end
 
