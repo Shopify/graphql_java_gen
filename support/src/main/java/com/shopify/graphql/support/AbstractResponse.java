@@ -103,7 +103,7 @@ public abstract class AbstractResponse<T extends AbstractResponse> implements Se
         return element.getAsJsonArray();
     }
 
-    public List<Node> getNodes() {
+    public List<Node> collectNodes() {
         final ArrayList<Node> children = new ArrayList<>();
 
         collectNodes(this, children);
