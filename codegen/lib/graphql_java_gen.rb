@@ -297,8 +297,9 @@ class GraphQLJavaGen
 
   def format_java_doc_list(text)
     parts = text.split(':')
-    if parts.count > 1
-      parts.first + ": \n* <ul>" + parts.last.gsub(/\s*?-\s*?`(.+?)`\s*?/, ' <li>\1</li>') + "\n* </ul>"
+    list_pattern = /\s*?-\s*?`(.+?)`\s*?/
+    if parts.count > 1 && list_pattern.match(parts.last)
+      parts.first + ":\n<ul>" + parts.last.gsub(list_pattern, "\n" + '<li>\1</li>') + '</ul>'
     else
       text
     end
