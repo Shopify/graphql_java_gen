@@ -67,7 +67,7 @@ public class <%= schema_name %> {
 
     <% schema.types.reject{ |type| type.name.start_with?('__') || type.scalar? }.each do |type| %>
         <% case type.kind when 'OBJECT', 'INTERFACE', 'UNION' %>
-            <% fields = type.fields || [] %>
+            <% fields = type.fields(include_deprecated: include_deprecated) || [] %>
             public interface <%= type.name %>QueryDefinition {
                 void define(<%= type.name %>Query _queryBuilder);
             }
@@ -115,7 +115,7 @@ public class <%= schema_name %> {
                     <% end %>
 
                     <%= java_doc(field) %>
-                    public <%= type.name %>Query <%= escape_reserved_word(field.camelize_name) %>(<%= java_arg_defs(field) %>) {
+                    <%= field.deprecated? ? '@Deprecated' : '' %> public <%= type.name %>Query <%= escape_reserved_word(field.camelize_name) %>(<%= java_arg_defs(field) %>) {
                         startField("<%= field.name %>");
                         <% unless field.args.empty? %>
                             <% if field.required_args.empty? %>
@@ -236,7 +236,7 @@ public class <%= schema_name %> {
 
                 <% fields.each do |field| %>
                     <%= java_doc(field) %>
-                    <%= java_annotations(field) %>
+                    <%= java_annotations(field) -%>
                     public <%= java_output_type(field.type) %> get<%= field.classify_name %>() {
                       return (<%= java_output_type(field.type) %>) get("<%= field.name %>");
                     }
