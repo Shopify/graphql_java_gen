@@ -67,7 +67,7 @@ public class <%= schema_name %> {
 
     <% schema.types.reject{ |type| type.name.start_with?('__') || type.scalar? }.each do |type| %>
         <% case type.kind when 'OBJECT', 'INTERFACE', 'UNION' %>
-            <% fields = type.fields || [] %>
+            <% fields = type.fields(include_deprecated: include_deprecated) || [] %>
             public interface <%= type.name %>QueryDefinition {
                 void define(<%= type.name %>Query _queryBuilder);
             }
@@ -115,6 +115,7 @@ public class <%= schema_name %> {
                     <% end %>
 
                     <%= java_doc(field) %>
+                    <%= field.deprecated? ? "@Deprecated\n" : '' -%>
                     public <%= type.name %>Query <%= escape_reserved_word(field.camelize_name) %>(<%= java_arg_defs(field) %>) {
                         startField("<%= field.name %>");
                         <% unless field.args.empty? %>
@@ -236,7 +237,7 @@ public class <%= schema_name %> {
 
                 <% fields.each do |field| %>
                     <%= java_doc(field) %>
-                    <%= java_annotations(field) %>
+                    <%= java_annotations(field) -%>
                     public <%= java_output_type(field.type) %> get<%= field.classify_name %>() {
                       return (<%= java_output_type(field.type) %>) get("<%= field.name %>");
                     }
@@ -318,9 +319,12 @@ public class <%= schema_name %> {
         <% when 'ENUM' %>
             <%= java_doc(type) %>
             public enum <%= type.name %> {
-              <% type.enum_values.each do |value| %>
+              <% type.enum_values(include_deprecated: include_deprecated).each do |value| %>
+                <%= java_doc(value) %>
+                <%= value.deprecated? ? "@Deprecated\n" : '' -%>
                 <%= value.upcase_name %>,
               <% end %>
+
               UNKNOWN_VALUE;
 
               public static <%= type.name %> fromGraphQl(String value) {

@@ -7,11 +7,11 @@ require 'erb'
 require 'set'
 
 class GraphQLJavaGen
-  attr_reader :schema, :package_name, :scalars, :imports, :script_name, :schema_name
+  attr_reader :schema, :package_name, :scalars, :imports, :script_name, :schema_name, :include_deprecated
 
   def initialize(schema,
     package_name:, nest_under:, script_name: 'graphql_java_gen gem',
-    custom_scalars: [], custom_annotations: []
+    custom_scalars: [], custom_annotations: [], include_deprecated: false
   )
     @schema = schema
     @schema_name = nest_under
@@ -21,6 +21,7 @@ class GraphQLJavaGen
     @scalars.default_proc = ->(hash, key) { DEFAULT_SCALAR }
     @annotations = custom_annotations
     @imports = (@scalars.values.map(&:imports) + @annotations.map(&:imports)).flatten.sort.uniq
+    @include_deprecated = include_deprecated
   end
 
   def save(path)
@@ -37,7 +38,7 @@ class GraphQLJavaGen
     private
 
     def erb_for(template_filename)
-      erb = ERB.new(File.read(template_filename))
+      erb = ERB.new(File.read(template_filename), nil, '-')
       erb.filename = template_filename
       erb
     end
@@ -280,12 +281,22 @@ class GraphQLJavaGen
     unless element.description.nil?
       description = wrap_text(element.description, 100)
       description = description.chomp("\n").gsub("\n", "\n* ")
-      doc << "/**\n"
       doc << '* '
       doc << description
-      doc << "\n*/"
     end
-    doc
+
+    if element.respond_to?(:deprecated?) && element.deprecated?
+      unless doc.empty?
+        doc << "\n*"
+        doc << "\n*"
+      else
+        doc << '*'        
+      end
+      doc << ' @deprecated '
+      doc << element.deprecation_reason
+    end
+
+    doc.empty? ? doc : "/**\n" + doc + "\n*/"
   end
 
   def wrap_text(text, col_width=80)
