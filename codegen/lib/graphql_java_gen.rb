@@ -38,7 +38,7 @@ class GraphQLJavaGen
     private
 
     def erb_for(template_filename)
-      erb = ERB.new(File.read(template_filename), 0, '-')
+      erb = ERB.new(File.read(template_filename), nil, '-')
       erb.filename = template_filename
       erb
     end
@@ -286,7 +286,7 @@ class GraphQLJavaGen
     end
 
     if element.respond_to?(:deprecated?) && element.deprecated?
-      if (doc.length > 0)
+      unless doc.empty?
         doc << "\n*"
         doc << "\n*"
       else
@@ -296,11 +296,7 @@ class GraphQLJavaGen
       doc << element.deprecation_reason
     end
 
-    if (doc.length > 0)
-      doc = "/**\n" + doc + "\n*/"
-    end
-
-    doc
+    doc.empty? ? doc : "/**\n" + doc + "\n*/"
   end
 
   def wrap_text(text, col_width=80)
