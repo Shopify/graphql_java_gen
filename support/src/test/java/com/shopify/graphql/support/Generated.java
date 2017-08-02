@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -429,6 +430,9 @@ public class Generated {
         }
     }
 
+    /**
+    * Types of values that can be stored in a key
+    */
     public enum KeyType {
         INTEGER,
 
@@ -676,6 +680,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get an entry of any type with the given key
+        */
         public QueryRootQuery entry(String key, EntryQueryDefinition queryDef) {
             startField("entry");
 
@@ -691,6 +698,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get an entry of any type with the given key as a union
+        */
         public QueryRootQuery entryUnion(String key, EntryUnionQueryDefinition queryDef) {
             startField("entry_union");
 
@@ -706,6 +716,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get a integer value with the given key
+        */
         public QueryRootQuery integer(String key) {
             startField("integer");
 
@@ -760,6 +773,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get a string value with the given key
+        */
         public QueryRootQuery string(String key) {
             startField("string");
 
@@ -936,6 +952,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get an entry of any type with the given key
+        */
         public Entry getEntry() {
             return (Entry) get("entry");
         }
@@ -945,6 +964,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get an entry of any type with the given key as a union
+        */
         public EntryUnion getEntryUnion() {
             return (EntryUnion) get("entry_union");
         }
@@ -954,6 +976,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get a integer value with the given key
+        */
         public Integer getInteger() {
             return (Integer) get("integer");
         }
@@ -972,6 +997,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get a string value with the given key
+        */
         public String getString() {
             return (String) get("string");
         }
@@ -1042,6 +1070,8 @@ public class Generated {
 
         private Boolean negate;
 
+        private HashSet<String> fieldsSeen = new HashSet<>();
+
         public SetIntegerInput(String key, int value) {
             this.key = key;
 
@@ -1072,6 +1102,7 @@ public class Generated {
 
         public SetIntegerInput setTtl(LocalDateTime ttl) {
             this.ttl = ttl;
+            fieldsSeen.add("ttl");
             return this;
         }
 
@@ -1081,6 +1112,7 @@ public class Generated {
 
         public SetIntegerInput setNegate(Boolean negate) {
             this.negate = negate;
+            fieldsSeen.add("negate");
             return this;
         }
 
@@ -1098,18 +1130,26 @@ public class Generated {
             _queryBuilder.append("value:");
             _queryBuilder.append(value);
 
-            if (ttl != null) {
+            if (fieldsSeen.contains("ttl")) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("ttl:");
-                Query.appendQuotedString(_queryBuilder, ttl.toString());
+                if (ttl != null) {
+                    Query.appendQuotedString(_queryBuilder, ttl.toString());
+                } else {
+                    _queryBuilder.append("null");
+                }
             }
 
-            if (negate != null) {
+            if (fieldsSeen.contains("negate")) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("negate:");
-                _queryBuilder.append(negate);
+                if (negate != null) {
+                    _queryBuilder.append(negate);
+                } else {
+                    _queryBuilder.append("null");
+                }
             }
 
             _queryBuilder.append('}');

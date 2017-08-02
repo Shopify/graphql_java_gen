@@ -18,6 +18,7 @@ import com.shopify.graphql.support.TopLevelResponse;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -266,6 +267,7 @@ public class <%= schema_name %> {
                 <% type.optional_input_fields.each do |field| %>
                   private <%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>;
                 <% end %>
+                  private HashSet<String> fieldsSeen = new HashSet<>();
 
                 <% unless type.required_input_fields.empty? %>
                   public <%= type.name %>(<%= type.required_input_fields.map{ |field| "#{java_input_type(field.type)} #{escape_reserved_word(field.camelize_name)}" }.join(', ') %>) {
@@ -292,6 +294,7 @@ public class <%= schema_name %> {
 
                   public <%= type.name %> set<%= field.classify_name %>(<%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
                       this.<%= escape_reserved_word(field.camelize_name) %> = <%= escape_reserved_word(field.camelize_name) %>;
+                      fieldsSeen.add("<%= field.name %>");
                       return this;
                   }
                 <% end %>
@@ -306,11 +309,15 @@ public class <%= schema_name %> {
                     <%= generate_build_input_code(escape_reserved_word(field.camelize_name), field.type) %>
                   <% end %>
                   <% type.optional_input_fields.each do |field| %>
-                    if (<%= escape_reserved_word(field.camelize_name) %> != null) {
+                    if (fieldsSeen.contains("<%= field.name %>")) {
                       _queryBuilder.append(separator);
                       separator = ",";
                       _queryBuilder.append("<%= field.name %>:");
-                      <%= generate_build_input_code(escape_reserved_word(field.camelize_name), field.type) %>
+                      if (<%= escape_reserved_word(field.camelize_name) %> != null) {
+                        <%= generate_build_input_code(escape_reserved_word(field.camelize_name), field.type) %>
+                      } else {
+                        _queryBuilder.append("null");
+                      }
                     }
                   <% end %>
                   _queryBuilder.append('}');
