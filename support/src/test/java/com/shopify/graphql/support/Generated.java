@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -1067,10 +1066,10 @@ public class Generated {
         private int value;
 
         private LocalDateTime ttl;
+        private boolean ttlSeen = false;
 
         private Boolean negate;
-
-        private HashSet<String> fieldsSeen = new HashSet<>();
+        private boolean negateSeen = false;
 
         public SetIntegerInput(String key, int value) {
             this.key = key;
@@ -1102,7 +1101,7 @@ public class Generated {
 
         public SetIntegerInput setTtl(LocalDateTime ttl) {
             this.ttl = ttl;
-            fieldsSeen.add("ttl");
+            this.ttlSeen = true;
             return this;
         }
 
@@ -1112,7 +1111,7 @@ public class Generated {
 
         public SetIntegerInput setNegate(Boolean negate) {
             this.negate = negate;
-            fieldsSeen.add("negate");
+            this.negateSeen = true;
             return this;
         }
 
@@ -1130,7 +1129,7 @@ public class Generated {
             _queryBuilder.append("value:");
             _queryBuilder.append(value);
 
-            if (fieldsSeen.contains("ttl")) {
+            if (this.ttlSeen) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("ttl:");
@@ -1141,7 +1140,7 @@ public class Generated {
                 }
             }
 
-            if (fieldsSeen.contains("negate")) {
+            if (this.negateSeen) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("negate:");
