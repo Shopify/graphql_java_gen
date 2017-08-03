@@ -265,7 +265,7 @@ public class <%= schema_name %> {
                 <% end %>
                 <% type.optional_input_fields.each do |field| %>
                   private <%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>;
-                  private boolean <%= escape_reserved_word(field.name) %>Seen = false;
+                  private boolean <%= field.camelize_name %>Seen = false;
                 <% end %>
 
                 <% unless type.required_input_fields.empty? %>
