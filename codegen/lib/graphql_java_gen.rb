@@ -253,10 +253,15 @@ class GraphQLJavaGen
     "implements #{interfaces.to_a.join(', ')} "
   end
 
-  def java_annotations(field)
-    @annotations.map do |annotation|
+  def java_annotations(field, in_argument: false)
+    annotations = @annotations.map do |annotation|
       "@#{annotation.name}" if annotation.annotate?(field)
-    end.compact.join("\n")
+    end.compact
+    if in_argument
+      annotations.join(" ") + " "
+    else
+      annotations.join("\n")
+    end
   end
 
   def type_names_set

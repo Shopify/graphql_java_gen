@@ -15,6 +15,8 @@ import com.shopify.graphql.support.TopLevelResponse;
 
 import com.shopify.graphql.support.ID;
 
+import com.shopify.graphql.support.Nullable;
+
 import java.time.LocalDateTime;
 
 import java.io.Serializable;
@@ -216,6 +218,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return (LocalDateTime) get("ttl");
         }
@@ -398,6 +401,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return (LocalDateTime) get("ttl");
         }
@@ -954,6 +958,7 @@ public class Generated {
         /**
         * Get an entry of any type with the given key
         */
+        @Nullable
         public Entry getEntry() {
             return (Entry) get("entry");
         }
@@ -966,6 +971,7 @@ public class Generated {
         /**
         * Get an entry of any type with the given key as a union
         */
+        @Nullable
         public EntryUnion getEntryUnion() {
             return (EntryUnion) get("entry_union");
         }
@@ -978,6 +984,7 @@ public class Generated {
         /**
         * Get a integer value with the given key
         */
+        @Nullable
         public Integer getInteger() {
             return (Integer) get("integer");
         }
@@ -999,6 +1006,7 @@ public class Generated {
         /**
         * Get a string value with the given key
         */
+        @Nullable
         public String getString() {
             return (String) get("string");
         }
@@ -1008,6 +1016,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return (LocalDateTime) get("ttl");
         }
@@ -1017,6 +1026,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public KeyType getType() {
             return (KeyType) get("type");
         }
@@ -1026,6 +1036,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public String getVersion() {
             return (String) get("version");
         }
@@ -1081,7 +1092,7 @@ public class Generated {
             return key;
         }
 
-        public SetIntegerInput setKey(String key) {
+        public SetIntegerInput setKey( String key) {
             this.key = key;
             return this;
         }
@@ -1090,26 +1101,28 @@ public class Generated {
             return value;
         }
 
-        public SetIntegerInput setValue(int value) {
+        public SetIntegerInput setValue( int value) {
             this.value = value;
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return ttl;
         }
 
-        public SetIntegerInput setTtl(LocalDateTime ttl) {
+        public SetIntegerInput setTtl(@Nullable LocalDateTime ttl) {
             this.ttl = ttl;
             this.ttlSeen = true;
             return this;
         }
 
+        @Nullable
         public Boolean getNegate() {
             return negate;
         }
 
-        public SetIntegerInput setNegate(Boolean negate) {
+        public SetIntegerInput setNegate(@Nullable Boolean negate) {
             this.negate = negate;
             this.negateSeen = true;
             return this;
@@ -1239,6 +1252,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return (LocalDateTime) get("ttl");
         }
