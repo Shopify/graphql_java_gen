@@ -1082,6 +1082,9 @@ public class Generated {
         private Boolean negate;
         private boolean negateSeen = false;
 
+        private String apiClient;
+        private boolean apiClientSeen = false;
+
         public SetIntegerInput(String key, int value) {
             this.key = key;
 
@@ -1128,6 +1131,17 @@ public class Generated {
             return this;
         }
 
+        @Nullable
+        public String getApiClient() {
+            return apiClient;
+        }
+
+        public SetIntegerInput setApiClient(@Nullable String apiClient) {
+            this.apiClient = apiClient;
+            this.apiClientSeen = true;
+            return this;
+        }
+
         public void appendTo(StringBuilder _queryBuilder) {
             String separator = "";
             _queryBuilder.append('{');
@@ -1159,6 +1173,17 @@ public class Generated {
                 _queryBuilder.append("negate:");
                 if (negate != null) {
                     _queryBuilder.append(negate);
+                } else {
+                    _queryBuilder.append("null");
+                }
+            }
+
+            if (this.apiClientSeen) {
+                _queryBuilder.append(separator);
+                separator = ",";
+                _queryBuilder.append("api_client:");
+                if (apiClient != null) {
+                    Query.appendQuotedString(_queryBuilder, apiClient.toString());
                 } else {
                     _queryBuilder.append("null");
                 }
