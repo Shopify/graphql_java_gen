@@ -1092,7 +1092,7 @@ public class Generated {
             return key;
         }
 
-        public SetIntegerInput setKey( String key) {
+        public SetIntegerInput setKey(String key) {
             this.key = key;
             return this;
         }
@@ -1101,7 +1101,7 @@ public class Generated {
             return value;
         }
 
-        public SetIntegerInput setValue( int value) {
+        public SetIntegerInput setValue(int value) {
             this.value = value;
             return this;
         }

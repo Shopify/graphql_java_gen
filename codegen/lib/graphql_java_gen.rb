@@ -257,6 +257,8 @@ class GraphQLJavaGen
     annotations = @annotations.map do |annotation|
       "@#{annotation.name}" if annotation.annotate?(field)
     end.compact
+    return "" unless annotations.any?
+
     if in_argument
       annotations.join(" ") + " "
     else
