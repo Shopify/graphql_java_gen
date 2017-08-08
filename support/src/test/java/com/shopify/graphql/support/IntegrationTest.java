@@ -156,4 +156,12 @@ public class IntegrationTest {
         Generated.Mutation data = Generated.MutationResponse.fromJson(json).getData();
         assertEquals(true, data.getSetString().booleanValue());
     }
+
+    @Test
+    public void testOptionalFieldOnInput() throws Exception {
+        String queryString = Generated.mutation(mutation -> mutation
+            .setInteger(new Generated.SetIntegerInput("answer", 42).setTtl(null))
+        ).toString();
+        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42,ttl:null})}", queryString);
+    }
 }

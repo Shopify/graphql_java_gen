@@ -25,6 +25,12 @@ task :generate do
         deserialize_expr: ->(expr) { "LocalDateTime.parse(jsonAsString(#{expr}, key))" },
         imports: ['java.time.LocalDateTime'],
       )
+    ],
+    custom_annotations: [
+      GraphQLJavaGen::Annotation.new(
+        'Nullable',
+        imports: ['com.shopify.graphql.support.Nullable']
+      ) { |field| !field.type.non_null? },
     ]
   ).save('support/src/test/java/com/shopify/graphql/support/Generated.java')
 

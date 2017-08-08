@@ -15,6 +15,8 @@ import com.shopify.graphql.support.TopLevelResponse;
 
 import com.shopify.graphql.support.ID;
 
+import com.shopify.graphql.support.Nullable;
+
 import java.time.LocalDateTime;
 
 import java.io.Serializable;
@@ -216,6 +218,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return (LocalDateTime) get("ttl");
         }
@@ -398,6 +401,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return (LocalDateTime) get("ttl");
         }
@@ -429,6 +433,9 @@ public class Generated {
         }
     }
 
+    /**
+    * Types of values that can be stored in a key
+    */
     public enum KeyType {
         INTEGER,
 
@@ -676,6 +683,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get an entry of any type with the given key
+        */
         public QueryRootQuery entry(String key, EntryQueryDefinition queryDef) {
             startField("entry");
 
@@ -691,6 +701,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get an entry of any type with the given key as a union
+        */
         public QueryRootQuery entryUnion(String key, EntryUnionQueryDefinition queryDef) {
             startField("entry_union");
 
@@ -706,6 +719,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get a integer value with the given key
+        */
         public QueryRootQuery integer(String key) {
             startField("integer");
 
@@ -760,6 +776,9 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get a string value with the given key
+        */
         public QueryRootQuery string(String key) {
             startField("string");
 
@@ -936,6 +955,10 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get an entry of any type with the given key
+        */
+        @Nullable
         public Entry getEntry() {
             return (Entry) get("entry");
         }
@@ -945,6 +968,10 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get an entry of any type with the given key as a union
+        */
+        @Nullable
         public EntryUnion getEntryUnion() {
             return (EntryUnion) get("entry_union");
         }
@@ -954,6 +981,10 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get a integer value with the given key
+        */
+        @Nullable
         public Integer getInteger() {
             return (Integer) get("integer");
         }
@@ -972,6 +1003,10 @@ public class Generated {
             return this;
         }
 
+        /**
+        * Get a string value with the given key
+        */
+        @Nullable
         public String getString() {
             return (String) get("string");
         }
@@ -981,6 +1016,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return (LocalDateTime) get("ttl");
         }
@@ -990,6 +1026,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public KeyType getType() {
             return (KeyType) get("type");
         }
@@ -999,6 +1036,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public String getVersion() {
             return (String) get("version");
         }
@@ -1039,8 +1077,13 @@ public class Generated {
         private int value;
 
         private LocalDateTime ttl;
+        private boolean ttlSeen = false;
 
         private Boolean negate;
+        private boolean negateSeen = false;
+
+        private String apiClient;
+        private boolean apiClientSeen = false;
 
         public SetIntegerInput(String key, int value) {
             this.key = key;
@@ -1066,21 +1109,36 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return ttl;
         }
 
-        public SetIntegerInput setTtl(LocalDateTime ttl) {
+        public SetIntegerInput setTtl(@Nullable LocalDateTime ttl) {
             this.ttl = ttl;
+            this.ttlSeen = true;
             return this;
         }
 
+        @Nullable
         public Boolean getNegate() {
             return negate;
         }
 
-        public SetIntegerInput setNegate(Boolean negate) {
+        public SetIntegerInput setNegate(@Nullable Boolean negate) {
             this.negate = negate;
+            this.negateSeen = true;
+            return this;
+        }
+
+        @Nullable
+        public String getApiClient() {
+            return apiClient;
+        }
+
+        public SetIntegerInput setApiClient(@Nullable String apiClient) {
+            this.apiClient = apiClient;
+            this.apiClientSeen = true;
             return this;
         }
 
@@ -1098,18 +1156,37 @@ public class Generated {
             _queryBuilder.append("value:");
             _queryBuilder.append(value);
 
-            if (ttl != null) {
+            if (this.ttlSeen) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("ttl:");
-                Query.appendQuotedString(_queryBuilder, ttl.toString());
+                if (ttl != null) {
+                    Query.appendQuotedString(_queryBuilder, ttl.toString());
+                } else {
+                    _queryBuilder.append("null");
+                }
             }
 
-            if (negate != null) {
+            if (this.negateSeen) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("negate:");
-                _queryBuilder.append(negate);
+                if (negate != null) {
+                    _queryBuilder.append(negate);
+                } else {
+                    _queryBuilder.append("null");
+                }
+            }
+
+            if (this.apiClientSeen) {
+                _queryBuilder.append(separator);
+                separator = ",";
+                _queryBuilder.append("api_client:");
+                if (apiClient != null) {
+                    Query.appendQuotedString(_queryBuilder, apiClient.toString());
+                } else {
+                    _queryBuilder.append("null");
+                }
             }
 
             _queryBuilder.append('}');
@@ -1200,6 +1277,7 @@ public class Generated {
             return this;
         }
 
+        @Nullable
         public LocalDateTime getTtl() {
             return (LocalDateTime) get("ttl");
         }

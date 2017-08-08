@@ -237,7 +237,7 @@ public class <%= schema_name %> {
 
                 <% fields.each do |field| %>
                     <%= java_doc(field) %>
-                    <%= java_annotations(field) -%>
+                    <%= java_annotations(field) %>
                     public <%= java_output_type(field.type) %> get<%= field.classify_name %>() {
                       return (<%= java_output_type(field.type) %>) get("<%= field.name %>");
                     }
@@ -265,6 +265,7 @@ public class <%= schema_name %> {
                 <% end %>
                 <% type.optional_input_fields.each do |field| %>
                   private <%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>;
+                  private boolean <%= field.camelize_name %>Seen = false;
                 <% end %>
 
                 <% unless type.required_input_fields.empty? %>
@@ -276,22 +277,25 @@ public class <%= schema_name %> {
                 <% end %>
 
                 <% type.required_input_fields.each do |field| %>
+                  <%= java_annotations(field) %>
                   public <%= java_input_type(field.type) %> get<%= field.classify_name %>() {
                       return <%= escape_reserved_word(field.camelize_name) %>;
                   }
 
-                  public <%= type.name %> set<%= field.classify_name %>(<%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
+                  public <%= type.name %> set<%= field.classify_name %>(<%= java_annotations(field, in_argument: true) %><%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
                       this.<%= escape_reserved_word(field.camelize_name) %> = <%= escape_reserved_word(field.camelize_name) %>;
                       return this;
                   }
                 <% end %>
                 <% type.optional_input_fields.each do |field| %>
+                  <%= java_annotations(field) %>
                   public <%= java_input_type(field.type) %> get<%= field.classify_name %>() {
                       return <%= escape_reserved_word(field.camelize_name) %>;
                   }
 
-                  public <%= type.name %> set<%= field.classify_name %>(<%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
+                  public <%= type.name %> set<%= field.classify_name %>(<%= java_annotations(field, in_argument: true) %><%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
                       this.<%= escape_reserved_word(field.camelize_name) %> = <%= escape_reserved_word(field.camelize_name) %>;
+                      this.<%= field.camelize_name %>Seen = true;
                       return this;
                   }
                 <% end %>
@@ -306,11 +310,15 @@ public class <%= schema_name %> {
                     <%= generate_build_input_code(escape_reserved_word(field.camelize_name), field.type) %>
                   <% end %>
                   <% type.optional_input_fields.each do |field| %>
-                    if (<%= escape_reserved_word(field.camelize_name) %> != null) {
+                    if (this.<%= field.camelize_name %>Seen) {
                       _queryBuilder.append(separator);
                       separator = ",";
                       _queryBuilder.append("<%= field.name %>:");
-                      <%= generate_build_input_code(escape_reserved_word(field.camelize_name), field.type) %>
+                      if (<%= escape_reserved_word(field.camelize_name) %> != null) {
+                        <%= generate_build_input_code(escape_reserved_word(field.camelize_name), field.type) %>
+                      } else {
+                        _queryBuilder.append("null");
+                      }
                     }
                   <% end %>
                   _queryBuilder.append('}');
