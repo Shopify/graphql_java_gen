@@ -1100,7 +1100,8 @@ public class Generated {
             return this;
         }
 
-        public void unSetKey() {
+        // Unsets the key property so that it is not serialized
+        public void unsetKey() {
             this.key = null;
         }
 
@@ -1113,7 +1114,8 @@ public class Generated {
             return this;
         }
 
-        public void unSetValue() {
+        // Unsets the value property so that it is not serialized
+        public void unsetValue() {
             this.value = null;
         }
 
@@ -1128,7 +1130,8 @@ public class Generated {
             return this;
         }
 
-        public void unSetTtl() {
+        // Unsets the ttl property so that it is not serialized
+        public void unsetTtl() {
             this.ttl = null;
             this.ttlSeen = false;
         }
@@ -1144,7 +1147,8 @@ public class Generated {
             return this;
         }
 
-        public void unSetNegate() {
+        // Unsets the negate property so that it is not serialized
+        public void unsetNegate() {
             this.negate = null;
             this.negateSeen = false;
         }
@@ -1160,7 +1164,8 @@ public class Generated {
             return this;
         }
 
-        public void unSetApiClient() {
+        // Unsets the apiClient property so that it is not serialized
+        public void unsetApiClient() {
             this.apiClient = null;
             this.apiClientSeen = false;
         }

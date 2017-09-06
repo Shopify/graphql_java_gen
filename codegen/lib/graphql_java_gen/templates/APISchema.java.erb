@@ -287,9 +287,11 @@ public class <%= schema_name %> {
                       return this;
                   }
 
-                  public void unSet<%= field.classify_name %>() {
+                  // Unsets the <%= escape_reserved_word(field.camelize_name) %> property so that it is not serialized
+                  public void unset<%= field.classify_name %>() {
                       this.<%= escape_reserved_word(field.camelize_name) %> = null;
                   }
+
                 <% end %>
                 <% type.optional_input_fields.each do |field| %>
                   <%= java_annotations(field) %>
@@ -303,10 +305,12 @@ public class <%= schema_name %> {
                       return this;
                   }
 
-                  public void unSet<%= field.classify_name %>() {
+                  // Unsets the <%= escape_reserved_word(field.camelize_name) %> property so that it is not serialized
+                  public void unset<%= field.classify_name %>() {
                       this.<%= escape_reserved_word(field.camelize_name) %> = null;
                       this.<%= field.camelize_name %>Seen = false;
                   }
+
                 <% end %>
 
                 public void appendTo(StringBuilder _queryBuilder) {
