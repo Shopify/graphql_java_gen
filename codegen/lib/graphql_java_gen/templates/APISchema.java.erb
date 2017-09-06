@@ -298,6 +298,11 @@ public class <%= schema_name %> {
                       this.<%= field.camelize_name %>Seen = true;
                       return this;
                   }
+
+                  public void clear<%= field.classify_name %>() {
+                      this.<%= escape_reserved_word(field.camelize_name) %> = null;
+                      this.<%= field.camelize_name %>Seen = false;
+                  }
                 <% end %>
 
                 public void appendTo(StringBuilder _queryBuilder) {

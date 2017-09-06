@@ -1120,6 +1120,11 @@ public class Generated {
             return this;
         }
 
+        public void clearTtl() {
+            this.ttl = null;
+            this.ttlSeen = false;
+        }
+
         @Nullable
         public Boolean getNegate() {
             return negate;
@@ -1131,6 +1136,11 @@ public class Generated {
             return this;
         }
 
+        public void clearNegate() {
+            this.negate = null;
+            this.negateSeen = false;
+        }
+
         @Nullable
         public String getApiClient() {
             return apiClient;
@@ -1140,6 +1150,11 @@ public class Generated {
             this.apiClient = apiClient;
             this.apiClientSeen = true;
             return this;
+        }
+
+        public void clearApiClient() {
+            this.apiClient = null;
+            this.apiClientSeen = false;
         }
 
         public void appendTo(StringBuilder _queryBuilder) {
