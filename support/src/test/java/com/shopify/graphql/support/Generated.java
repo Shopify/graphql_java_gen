@@ -1100,6 +1100,10 @@ public class Generated {
             return this;
         }
 
+        public void unSetKey() {
+            this.key = null;
+        }
+
         public int getValue() {
             return value;
         }
@@ -1107,6 +1111,10 @@ public class Generated {
         public SetIntegerInput setValue(int value) {
             this.value = value;
             return this;
+        }
+
+        public void unSetValue() {
+            this.value = null;
         }
 
         @Nullable
@@ -1120,7 +1128,7 @@ public class Generated {
             return this;
         }
 
-        public void clearTtl() {
+        public void unSetTtl() {
             this.ttl = null;
             this.ttlSeen = false;
         }
@@ -1136,7 +1144,7 @@ public class Generated {
             return this;
         }
 
-        public void clearNegate() {
+        public void unSetNegate() {
             this.negate = null;
             this.negateSeen = false;
         }
@@ -1152,7 +1160,7 @@ public class Generated {
             return this;
         }
 
-        public void clearApiClient() {
+        public void unSetApiClient() {
             this.apiClient = null;
             this.apiClientSeen = false;
         }

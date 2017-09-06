@@ -166,9 +166,17 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testClearOptionalFieldOnInput() throws Exception {
+    public void testUnSetRequiredlFieldOnInput() throws Exception {
         String queryString = Generated.mutation(mutation -> mutation
-            .setInteger(new Generated.SetIntegerInput("answer", 42).setTtl(null).clearTtl())
+            .setInteger(new Generated.SetIntegerInput("answer", 42).setTtl(null).unSetValue())
+        ).toString();
+        assertEquals("mutation{set_integer(input:{key:\"answer\",ttl:null})}", queryString);
+    }
+
+    @Test
+    public void testUnSetOptionalFieldOnInput() throws Exception {
+        String queryString = Generated.mutation(mutation -> mutation
+            .setInteger(new Generated.SetIntegerInput("answer", 42).setTtl(null).unSetTtl())
         ).toString();
         assertEquals("mutation{set_integer(input:{key:\"answer\",value:42})}", queryString);
     }

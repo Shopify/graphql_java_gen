@@ -286,6 +286,10 @@ public class <%= schema_name %> {
                       this.<%= escape_reserved_word(field.camelize_name) %> = <%= escape_reserved_word(field.camelize_name) %>;
                       return this;
                   }
+
+                  public void unSet<%= field.classify_name %>() {
+                      this.<%= escape_reserved_word(field.camelize_name) %> = null;
+                  }
                 <% end %>
                 <% type.optional_input_fields.each do |field| %>
                   <%= java_annotations(field) %>
@@ -299,7 +303,7 @@ public class <%= schema_name %> {
                       return this;
                   }
 
-                  public void clear<%= field.classify_name %>() {
+                  public void unSet<%= field.classify_name %>() {
                       this.<%= escape_reserved_word(field.camelize_name) %> = null;
                       this.<%= field.camelize_name %>Seen = false;
                   }
