@@ -287,11 +287,6 @@ public class <%= schema_name %> {
                       return this;
                   }
 
-                  // Unsets the <%= escape_reserved_word(field.camelize_name) %> property so that it is not serialized
-                  public void unset<%= field.classify_name %>() {
-                      this.<%= escape_reserved_word(field.camelize_name) %> = null;
-                  }
-
                 <% end %>
                 <% type.optional_input_fields.each do |field| %>
                   <%= java_annotations(field) %>

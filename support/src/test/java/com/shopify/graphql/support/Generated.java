@@ -1100,11 +1100,6 @@ public class Generated {
             return this;
         }
 
-        // Unsets the key property so that it is not serialized
-        public void unsetKey() {
-            this.key = null;
-        }
-
         public int getValue() {
             return value;
         }
@@ -1112,11 +1107,6 @@ public class Generated {
         public SetIntegerInput setValue(int value) {
             this.value = value;
             return this;
-        }
-
-        // Unsets the value property so that it is not serialized
-        public void unsetValue() {
-            this.value = null;
         }
 
         @Nullable
