@@ -12,6 +12,7 @@ import com.shopify.graphql.support.Error;
 import com.shopify.graphql.support.Query;
 import com.shopify.graphql.support.SchemaViolationError;
 import com.shopify.graphql.support.TopLevelResponse;
+import com.shopify.graphql.support.Input;
 <% imports.each do |import| %>
   import <%= import %>;
 <% end %>
@@ -264,8 +265,7 @@ public class <%= schema_name %> {
                   private <%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>;
                 <% end %>
                 <% type.optional_input_fields.each do |field| %>
-                  private <%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>;
-                  private boolean <%= field.camelize_name %>Seen = false;
+                  private Input<<%= java_input_type(field.type) %>> <%= escape_reserved_word(field.camelize_name) %> = Input.undefined();
                 <% end %>
 
                 <% unless type.required_input_fields.empty? %>
@@ -291,19 +291,23 @@ public class <%= schema_name %> {
                 <% type.optional_input_fields.each do |field| %>
                   <%= java_annotations(field) %>
                   public <%= java_input_type(field.type) %> get<%= field.classify_name %>() {
+                      return <%= escape_reserved_word(field.camelize_name) %>.getValue();
+                  }
+
+                  public Input<<%= java_input_type(field.type) %>> get<%= field.classify_name %>Input() {
                       return <%= escape_reserved_word(field.camelize_name) %>;
                   }
 
                   public <%= type.name %> set<%= field.classify_name %>(<%= java_annotations(field, in_argument: true) %><%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
-                      this.<%= escape_reserved_word(field.camelize_name) %> = <%= escape_reserved_word(field.camelize_name) %>;
-                      this.<%= field.camelize_name %>Seen = true;
+                      this.<%= escape_reserved_word(field.camelize_name) %> = Input.value(<%= escape_reserved_word(field.camelize_name) %>);
                       return this;
                   }
 
-                  // Unsets the <%= escape_reserved_word(field.camelize_name) %> property so that it is not serialized.
-                  public <%= type.name %> unset<%= field.classify_name %>() {
-                      this.<%= escape_reserved_word(field.camelize_name) %> = null;
-                      this.<%= field.camelize_name %>Seen = false;
+                  public <%= type.name %> set<%= field.classify_name %>Input(Input<<%= java_input_type(field.type) %>> <%= escape_reserved_word(field.camelize_name) %>) {
+                      if (<%= escape_reserved_word(field.camelize_name) %> == null) {
+                          throw new IllegalArgumentException("Input can not be null");
+                      }
+                      this.<%= escape_reserved_word(field.camelize_name) %> = <%= escape_reserved_word(field.camelize_name) %>;
                       return this;
                   }
 
@@ -319,12 +323,12 @@ public class <%= schema_name %> {
                     <%= generate_build_input_code(escape_reserved_word(field.camelize_name), field.type) %>
                   <% end %>
                   <% type.optional_input_fields.each do |field| %>
-                    if (this.<%= field.camelize_name %>Seen) {
+                    if (this.<%= escape_reserved_word(field.camelize_name) %>.isDefined()) {
                       _queryBuilder.append(separator);
                       separator = ",";
                       _queryBuilder.append("<%= field.name %>:");
-                      if (<%= escape_reserved_word(field.camelize_name) %> != null) {
-                        <%= generate_build_input_code(escape_reserved_word(field.camelize_name), field.type) %>
+                      if (<%= escape_reserved_word(field.camelize_name) %>.getValue() != null) {
+                        <%= generate_build_input_code(escape_reserved_word(field.camelize_name).concat(".getValue()"), field.type) %>
                       } else {
                         _queryBuilder.append("null");
                       }

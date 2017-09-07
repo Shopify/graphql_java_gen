@@ -12,6 +12,7 @@ import com.shopify.graphql.support.Error;
 import com.shopify.graphql.support.Query;
 import com.shopify.graphql.support.SchemaViolationError;
 import com.shopify.graphql.support.TopLevelResponse;
+import com.shopify.graphql.support.Input;
 
 import com.shopify.graphql.support.ID;
 
@@ -1076,14 +1077,11 @@ public class Generated {
 
         private int value;
 
-        private LocalDateTime ttl;
-        private boolean ttlSeen = false;
+        private Input<LocalDateTime> ttl = Input.undefined();
 
-        private Boolean negate;
-        private boolean negateSeen = false;
+        private Input<Boolean> negate = Input.undefined();
 
-        private String apiClient;
-        private boolean apiClientSeen = false;
+        private Input<String> apiClient = Input.undefined();
 
         public SetIntegerInput(String key, int value) {
             this.key = key;
@@ -1111,55 +1109,67 @@ public class Generated {
 
         @Nullable
         public LocalDateTime getTtl() {
+            return ttl.getValue();
+        }
+
+        public Input<LocalDateTime> getTtlInput() {
             return ttl;
         }
 
         public SetIntegerInput setTtl(@Nullable LocalDateTime ttl) {
-            this.ttl = ttl;
-            this.ttlSeen = true;
+            this.ttl = Input.value(ttl);
             return this;
         }
 
-        // Unsets the ttl property so that it is not serialized.
-        public SetIntegerInput unsetTtl() {
-            this.ttl = null;
-            this.ttlSeen = false;
+        public SetIntegerInput setTtlInput(Input<LocalDateTime> ttl) {
+            if (ttl == null) {
+                throw new IllegalArgumentException("Input can not be null");
+            }
+            this.ttl = ttl;
             return this;
         }
 
         @Nullable
         public Boolean getNegate() {
+            return negate.getValue();
+        }
+
+        public Input<Boolean> getNegateInput() {
             return negate;
         }
 
         public SetIntegerInput setNegate(@Nullable Boolean negate) {
-            this.negate = negate;
-            this.negateSeen = true;
+            this.negate = Input.value(negate);
             return this;
         }
 
-        // Unsets the negate property so that it is not serialized.
-        public SetIntegerInput unsetNegate() {
-            this.negate = null;
-            this.negateSeen = false;
+        public SetIntegerInput setNegateInput(Input<Boolean> negate) {
+            if (negate == null) {
+                throw new IllegalArgumentException("Input can not be null");
+            }
+            this.negate = negate;
             return this;
         }
 
         @Nullable
         public String getApiClient() {
+            return apiClient.getValue();
+        }
+
+        public Input<String> getApiClientInput() {
             return apiClient;
         }
 
         public SetIntegerInput setApiClient(@Nullable String apiClient) {
-            this.apiClient = apiClient;
-            this.apiClientSeen = true;
+            this.apiClient = Input.value(apiClient);
             return this;
         }
 
-        // Unsets the apiClient property so that it is not serialized.
-        public SetIntegerInput unsetApiClient() {
-            this.apiClient = null;
-            this.apiClientSeen = false;
+        public SetIntegerInput setApiClientInput(Input<String> apiClient) {
+            if (apiClient == null) {
+                throw new IllegalArgumentException("Input can not be null");
+            }
+            this.apiClient = apiClient;
             return this;
         }
 
@@ -1177,34 +1187,34 @@ public class Generated {
             _queryBuilder.append("value:");
             _queryBuilder.append(value);
 
-            if (this.ttlSeen) {
+            if (this.ttl.isDefined()) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("ttl:");
-                if (ttl != null) {
-                    Query.appendQuotedString(_queryBuilder, ttl.toString());
+                if (ttl.getValue() != null) {
+                    Query.appendQuotedString(_queryBuilder, ttl.getValue().toString());
                 } else {
                     _queryBuilder.append("null");
                 }
             }
 
-            if (this.negateSeen) {
+            if (this.negate.isDefined()) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("negate:");
-                if (negate != null) {
-                    _queryBuilder.append(negate);
+                if (negate.getValue() != null) {
+                    _queryBuilder.append(negate.getValue());
                 } else {
                     _queryBuilder.append("null");
                 }
             }
 
-            if (this.apiClientSeen) {
+            if (this.apiClient.isDefined()) {
                 _queryBuilder.append(separator);
                 separator = ",";
                 _queryBuilder.append("api_client:");
-                if (apiClient != null) {
-                    Query.appendQuotedString(_queryBuilder, apiClient.toString());
+                if (apiClient.getValue() != null) {
+                    Query.appendQuotedString(_queryBuilder, apiClient.getValue().toString());
                 } else {
                     _queryBuilder.append("null");
                 }
