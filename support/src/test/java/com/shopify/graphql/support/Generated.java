@@ -1120,6 +1120,13 @@ public class Generated {
             return this;
         }
 
+        // Unsets the ttl property so that it is not serialized.
+        public SetIntegerInput unsetTtl() {
+            this.ttl = null;
+            this.ttlSeen = false;
+            return this;
+        }
+
         @Nullable
         public Boolean getNegate() {
             return negate;
@@ -1131,6 +1138,13 @@ public class Generated {
             return this;
         }
 
+        // Unsets the negate property so that it is not serialized.
+        public SetIntegerInput unsetNegate() {
+            this.negate = null;
+            this.negateSeen = false;
+            return this;
+        }
+
         @Nullable
         public String getApiClient() {
             return apiClient;
@@ -1139,6 +1153,13 @@ public class Generated {
         public SetIntegerInput setApiClient(@Nullable String apiClient) {
             this.apiClient = apiClient;
             this.apiClientSeen = true;
+            return this;
+        }
+
+        // Unsets the apiClient property so that it is not serialized.
+        public SetIntegerInput unsetApiClient() {
+            this.apiClient = null;
+            this.apiClientSeen = false;
             return this;
         }
 

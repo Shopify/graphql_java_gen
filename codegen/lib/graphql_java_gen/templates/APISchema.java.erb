@@ -286,6 +286,7 @@ public class <%= schema_name %> {
                       this.<%= escape_reserved_word(field.camelize_name) %> = <%= escape_reserved_word(field.camelize_name) %>;
                       return this;
                   }
+
                 <% end %>
                 <% type.optional_input_fields.each do |field| %>
                   <%= java_annotations(field) %>
@@ -298,6 +299,14 @@ public class <%= schema_name %> {
                       this.<%= field.camelize_name %>Seen = true;
                       return this;
                   }
+
+                  // Unsets the <%= escape_reserved_word(field.camelize_name) %> property so that it is not serialized.
+                  public <%= type.name %> unset<%= field.classify_name %>() {
+                      this.<%= escape_reserved_word(field.camelize_name) %> = null;
+                      this.<%= field.camelize_name %>Seen = false;
+                      return this;
+                  }
+
                 <% end %>
 
                 public void appendTo(StringBuilder _queryBuilder) {
