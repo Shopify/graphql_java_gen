@@ -1120,10 +1120,11 @@ public class Generated {
             return this;
         }
 
-        // Unsets the ttl property so that it is not serialized
-        public void unsetTtl() {
+        // Unsets the ttl property so that it is not serialized.
+        public SetIntegerInput unsetTtl() {
             this.ttl = null;
             this.ttlSeen = false;
+            return this;
         }
 
         @Nullable
@@ -1137,10 +1138,11 @@ public class Generated {
             return this;
         }
 
-        // Unsets the negate property so that it is not serialized
-        public void unsetNegate() {
+        // Unsets the negate property so that it is not serialized.
+        public SetIntegerInput unsetNegate() {
             this.negate = null;
             this.negateSeen = false;
+            return this;
         }
 
         @Nullable
@@ -1154,10 +1156,11 @@ public class Generated {
             return this;
         }
 
-        // Unsets the apiClient property so that it is not serialized
-        public void unsetApiClient() {
+        // Unsets the apiClient property so that it is not serialized.
+        public SetIntegerInput unsetApiClient() {
             this.apiClient = null;
             this.apiClientSeen = false;
+            return this;
         }
 
         public void appendTo(StringBuilder _queryBuilder) {

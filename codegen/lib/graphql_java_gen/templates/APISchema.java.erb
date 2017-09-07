@@ -300,10 +300,11 @@ public class <%= schema_name %> {
                       return this;
                   }
 
-                  // Unsets the <%= escape_reserved_word(field.camelize_name) %> property so that it is not serialized
-                  public void unset<%= field.classify_name %>() {
+                  // Unsets the <%= escape_reserved_word(field.camelize_name) %> property so that it is not serialized.
+                  public <%= type.name %> unset<%= field.classify_name %>() {
                       this.<%= escape_reserved_word(field.camelize_name) %> = null;
                       this.<%= field.camelize_name %>Seen = false;
+                      return this;
                   }
 
                 <% end %>
