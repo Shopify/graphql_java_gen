@@ -12,6 +12,7 @@ import com.shopify.graphql.support.Error;
 import com.shopify.graphql.support.Query;
 import com.shopify.graphql.support.SchemaViolationError;
 import com.shopify.graphql.support.TopLevelResponse;
+import com.shopify.graphql.support.Input;
 
 import com.shopify.graphql.support.ID;
 

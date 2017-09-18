@@ -1,5 +1,6 @@
 package com.shopify.graphql.support;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -166,10 +167,26 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testUnsetOptionalFieldOnInput() throws Exception {
+    public void testOptionalFieldOnInputAsUndefined() throws Exception {
         String queryString = Generated.mutation(mutation -> mutation
-            .setInteger(new Generated.SetIntegerInput("answer", 42).setTtl(null).unsetTtl())
+          .setInteger(new Generated.SetIntegerInput("answer", 42).setTtlInput(Input.<LocalDateTime>undefined()))
         ).toString();
         assertEquals("mutation{set_integer(input:{key:\"answer\",value:42})}", queryString);
+    }
+
+    @Test
+    public void testOptionalFieldOnInputAsExplicitNull() throws Exception {
+        String queryString = Generated.mutation(mutation -> mutation
+          .setInteger(new Generated.SetIntegerInput("answer", 42).setTtlInput(Input.<LocalDateTime>value(null)))
+        ).toString();
+        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42,ttl:null})}", queryString);
+    }
+
+    @Test
+    public void testOptionalFieldOnInputAsInputValue() throws Exception {
+        String queryString = Generated.mutation(mutation -> mutation
+          .setInteger(new Generated.SetIntegerInput("answer", 42).setTtlInput(Input.<LocalDateTime>value(LocalDateTime.of(2017, 1, 31, 10, 9, 48))))
+        ).toString();
+        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42,ttl:\"2017-01-31T10:09:48\"})}", queryString);
     }
 }
