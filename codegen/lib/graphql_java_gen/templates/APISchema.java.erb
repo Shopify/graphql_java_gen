@@ -299,7 +299,7 @@ public class <%= schema_name %> {
                   }
 
                   public <%= type.name %> set<%= field.classify_name %>(<%= java_annotations(field, in_argument: true) %><%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
-                      this.<%= escape_reserved_word(field.camelize_name) %> = Input.value(<%= escape_reserved_word(field.camelize_name) %>);
+                      this.<%= escape_reserved_word(field.camelize_name) %> = Input.optional(<%= escape_reserved_word(field.camelize_name) %>);
                       return this;
                   }
 
