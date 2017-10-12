@@ -15,6 +15,10 @@ public final class Input<T> implements Serializable {
     return new Input<>(value, true);
   }
 
+  public static <T> Input<T> optional(@Nullable T value) {
+    return value != null ? value(value) : Input.<T>undefined();
+  }
+
   public static <T> Input<T> undefined() {
     return new Input<>(null, false);
   }

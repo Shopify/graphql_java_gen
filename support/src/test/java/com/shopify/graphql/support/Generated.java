@@ -1117,7 +1117,7 @@ public class Generated {
         }
 
         public SetIntegerInput setTtl(@Nullable LocalDateTime ttl) {
-            this.ttl = Input.value(ttl);
+            this.ttl = Input.optional(ttl);
             return this;
         }
 
@@ -1139,7 +1139,7 @@ public class Generated {
         }
 
         public SetIntegerInput setNegate(@Nullable Boolean negate) {
-            this.negate = Input.value(negate);
+            this.negate = Input.optional(negate);
             return this;
         }
 
@@ -1161,7 +1161,7 @@ public class Generated {
         }
 
         public SetIntegerInput setApiClient(@Nullable String apiClient) {
-            this.apiClient = Input.value(apiClient);
+            this.apiClient = Input.optional(apiClient);
             return this;
         }
 
