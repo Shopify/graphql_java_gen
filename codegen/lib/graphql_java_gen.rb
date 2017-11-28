@@ -28,6 +28,13 @@ class GraphQLJavaGen
     File.write(path, generate)
   end
 
+  def save_granular(path)
+    write_static_methods(path)
+    write_response(path, :query, schema.query_root_name)
+    write_response(path, :mutation, schema.mutation_root_name)
+    write_entities(path)
+  end
+
   def generate
     reformat(TEMPLATE_ERB.result(binding))
   end
@@ -46,6 +53,47 @@ class GraphQLJavaGen
 
   TEMPLATE_ERB = erb_for(File.expand_path("../graphql_java_gen/templates/APISchema.java.erb", __FILE__))
   private_constant :TEMPLATE_ERB
+
+  def erb_for_entity(template)
+    template_filename = File.expand_path("../graphql_java_gen/templates/#{template}.erb", __FILE__)
+    erb = ERB.new(File.read(template_filename), nil, '-')
+    erb.filename = template_filename
+    erb
+  end
+
+  def generate_entity(template, type)
+    erb_template = erb_for_entity(template)
+    reformat(erb_template.result(binding))
+  end
+
+  def write_static_methods(path)
+    File.write(path + "/Operations.java", reformat(erb_for_entity("Operations.java").result(binding)))
+  end
+
+  def write_response(path, query, root_name)
+    response_type = query.to_s.capitalize
+    response = reformat(erb_for_entity("Responses.java").result(binding))
+    File.write(path + "/#{response_type}Response.java", response)
+  end
+
+  def write_entities(path)
+    schema.types.reject{ |type| type.name.start_with?('__') || type.scalar? }.each do |type|
+      case type.kind when 'OBJECT', 'INTERFACE', 'UNION'
+                       File.write(path + "/#{type.name}QueryDefinition.java", generate_entity("QueryDefinition.java", type))
+                       File.write(path + "/#{type.name}Query.java", generate_entity("Query.java", type))
+                       File.write(path + "/#{type.name}.java", generate_entity("Interface.java", type))
+
+                       class_name = type.object? ? type.name : "Unknown#{type.name}"
+                       File.write(path + "/#{class_name}.java", generate_entity("Object.java", type))
+        when 'INPUT_OBJECT'
+          File.write(path + "/#{type.name}.java", generate_entity("Input.java", type))
+        when 'ENUM'
+          File.write(path + "/#{type.name}.java", generate_entity("Enum.java", type))
+        else
+          raise NotImplementedError, "unhandled #{type.kind} type #{type.name}"
+      end
+    end
+  end
 
   DEFAULT_SCALAR = Scalar.new(
     type_name: nil,

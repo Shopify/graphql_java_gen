@@ -25,9 +25,11 @@ The generated code depends on the com.shopify.graphql.support java
 package. This can be added to a gradle project by adding the following
 jCenter dependancy to you `build.gradle` file:
 
-    compile 'com.shopify.graphql.support:support:0.1.0'
+    compile 'com.shopify.graphql.support:support:0.2.0'
 
 ## Usage
+
+### Monolith (single file) schema generation
 
 Create a script that generates the code for a GraphQL API
 
@@ -52,6 +54,48 @@ GraphQLJavaGen.new(schema,
   ]
 ).save("#{Dir.pwd}/../MyApp/src/main/java/com/example/MyApp/ExampleSchema.java")
 ```
+
+The generated `ExampleSchema.java` will include a single class, `ExampleSchema`, which contains
+all defined GraphQL schema entities as nested subclasses.
+
+
+### Granular (multiple file) schema generation
+
+You may also generate separate class files for each schema entity using the `save_granular` command.
+In this case, you should provide the path to a directory, not a single class.
+
+e.g.
+```
+```ruby
+require 'graphql_java_gen'
+require 'graphql_schema'
+require 'json'
+
+introspection_result = File.read("graphql_schema.json")
+schema = GraphQLSchema.new(JSON.parse(introspection_result))
+
+GraphQLJavaGen.new(schema,
+  package_name: "com.example.MyApp",
+  nest_under: 'ExampleSchema',
+  custom_scalars: [
+    GraphQLJavaGen::Scalar.new(
+      type_name: 'Decimal',
+      java_type: 'BigDecimal',
+      deserialize_expr: ->(expr) { "new BigDecimal(jsonAsString(#{expr}, key))" },
+      imports: ['java.math.BigDecimal'],
+    ),
+  ]
+).save_granular("#{Dir.pwd}/../MyApp/src/main/java/com/example/MyApp/")
+```
+
+When using the granular option, the `com.example.MyApp` package wil contain many small
+class files each containing a single GraphQL schema entity.
+
+### Generated code
+
+Regarless of whether you use the monolith or granular schema generator, the usage is largely the same.
+The only difference depends on whether you access the schema entities directly from the provided package
+or as nested, static classes on the `ExampleSchema` class.
 
 That generated code depends on the com.shopify.graphql.support package.
 
