@@ -193,12 +193,13 @@ class GraphQLJavaGen
       item_type = type.of_type
       <<-JAVA
         _queryBuilder.append('[');
-
-        String listSeperator#{depth} = "";
-        for (#{java_input_type(item_type)} item#{depth} : #{expr}) {
-          _queryBuilder.append(listSeperator#{depth});
-          listSeperator#{depth} = ",";
-          #{generate_build_input_code("item#{depth}", item_type, depth: depth + 1)}
+        {
+          String listSeperator#{depth} = "";
+          for (#{java_input_type(item_type)} item#{depth} : #{expr}) {
+            _queryBuilder.append(listSeperator#{depth});
+            listSeperator#{depth} = ",";
+            #{generate_build_input_code("item#{depth}", item_type, depth: depth + 1)}
+          }
         }
         _queryBuilder.append(']');
       JAVA
