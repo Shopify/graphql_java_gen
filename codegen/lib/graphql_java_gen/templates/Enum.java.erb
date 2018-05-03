@@ -41,7 +41,7 @@ import java.util.Map;
             }
 
             switch (value) {
-              <% type.enum_values.each do |value| %>
+              <% type.enum_values(include_deprecated: include_deprecated).each do |value| %>
                 case "<%= value.name %>": {
                   return <%= value.upcase_name %>;
                 }
@@ -53,7 +53,7 @@ import java.util.Map;
           }
           public String toString() {
             switch (this) {
-              <% type.enum_values.each do |value| %>
+              <% type.enum_values(include_deprecated: include_deprecated).each do |value| %>
                 case <%= value.upcase_name %>: {
                   return "<%= value.name %>";
                 }
