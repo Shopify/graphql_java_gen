@@ -65,7 +65,6 @@ You may also generate separate class files for each schema entity using the `sav
 In this case, you should provide the path to a directory, not a single class.
 
 e.g.
-```
 ```ruby
 require 'graphql_java_gen'
 require 'graphql_schema'
