@@ -18,8 +18,8 @@ apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.8.5'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    testImplementation 'junit:junit:4.12'
 }
 
 compileJava {
