@@ -3,7 +3,6 @@ package com.shopify.graphql.support;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class QueryTest {
     @Test
@@ -13,29 +12,18 @@ public class QueryTest {
         assertEquals("\"\\u0000 \\r \\n \\\\ \\\" c ꝏ\"", result.toString());
     }
 
-    @Test
-    public void testInvalidAlias() {
-        boolean exceptionThrown = false;
-        try {
-            new Query<Query>(null) {
-            }.withAlias("invalid__alias");
-        } catch (IllegalArgumentException e) {
-            exceptionThrown = true;
-        } finally {
-            assertTrue(exceptionThrown);
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidAliasWithUnderscore() {
+        new Query<Query>(null) {}.withAlias("invalid__alias");
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidAliasWithDashes() {
+        new Query<Query>(null) {}.withAlias("invalid-alias");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testBlankAlias() {
-        boolean exceptionThrown = false;
-        try {
-            new Query<Query>(null) {
-            }.withAlias("");
-        } catch (IllegalArgumentException e) {
-            exceptionThrown = true;
-        } finally {
-            assertTrue(exceptionThrown);
-        }
+        new Query<Query>(null) {}.withAlias("");
     }
 }

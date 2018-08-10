@@ -5,6 +5,7 @@ package com.shopify.graphql.support;
  */
 public abstract class Query<T extends Query> {
     public static final String ALIAS_SUFFIX_SEPARATOR = "__";
+    private static final String BAD_ALIAS_SEPARATOR = "-";
     private static final String ALIAS_DELIMITER = ":";
     protected final StringBuilder _queryBuilder;
     private boolean firstSelection = true;
@@ -81,6 +82,9 @@ public abstract class Query<T extends Query> {
         }
         if (aliasSuffix.contains(Query.ALIAS_SUFFIX_SEPARATOR)) {
             throw new IllegalArgumentException("Alias must not contain __");
+        }
+        if (aliasSuffix.contains(Query.BAD_ALIAS_SEPARATOR)) {
+            throw new IllegalArgumentException("Alias must not contain -");
         }
         this.aliasSuffix = aliasSuffix;
         // noinspection unchecked
