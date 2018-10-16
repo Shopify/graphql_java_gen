@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by dylansmith on 2015-11-23.
  */
-public abstract class AbstractResponse<T extends AbstractResponse> implements Serializable {
+public abstract class AbstractResponse<T> implements Serializable {
     public final HashMap<String, Object> responseData = new HashMap<>();
     public final HashMap<String, Object> optimisticData = new HashMap<>();
     private String aliasSuffix = null;
