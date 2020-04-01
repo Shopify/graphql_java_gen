@@ -44,6 +44,7 @@ schema = GraphQLSchema.new(JSON.parse(introspection_result))
 GraphQLJavaGen.new(schema,
   package_name: "com.example.MyApp",
   nest_under: 'ExampleSchema',
+  version: '2020-01',
   custom_scalars: [
     GraphQLJavaGen::Scalar.new(
       type_name: 'Decimal',
@@ -76,6 +77,7 @@ schema = GraphQLSchema.new(JSON.parse(introspection_result))
 GraphQLJavaGen.new(schema,
   package_name: "com.example.MyApp",
   nest_under: 'ExampleSchema',
+  version: '2020-01',
   custom_scalars: [
     GraphQLJavaGen::Scalar.new(
       type_name: 'Decimal',

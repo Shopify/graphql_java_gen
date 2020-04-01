@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 public class <%= schema_name %> {
+    public static final String API_VERSION = "<%= version %>";
+
     <% [[:query, schema.query_root_name], [:mutation, schema.mutation_root_name]].each do |operation_type, root_name| %>
         <% next unless root_name %>
         public static <%= root_name %>Query <%= operation_type %>(<%= root_name %>QueryDefinition queryDef) {
