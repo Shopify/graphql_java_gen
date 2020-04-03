@@ -7,11 +7,11 @@ require 'erb'
 require 'set'
 
 class GraphQLJavaGen
-  attr_reader :schema, :package_name, :scalars, :imports, :script_name, :schema_name, :include_deprecated
+  attr_reader :schema, :package_name, :scalars, :imports, :script_name, :schema_name, :include_deprecated, :version
 
   def initialize(schema,
     package_name:, nest_under:, script_name: 'graphql_java_gen gem',
-    custom_scalars: [], custom_annotations: [], include_deprecated: false
+    custom_scalars: [], custom_annotations: [], include_deprecated: false, version: ''
   )
     @schema = schema
     @schema_name = nest_under
@@ -22,6 +22,7 @@ class GraphQLJavaGen
     @annotations = custom_annotations
     @imports = (@scalars.values.map(&:imports) + @annotations.map(&:imports)).flatten.sort.uniq
     @include_deprecated = include_deprecated
+    @version = version
   end
 
   def save(path)
@@ -29,6 +30,7 @@ class GraphQLJavaGen
   end
 
   def save_granular(path)
+    write_schema(path)
     write_static_methods(path)
     write_response(path, :query, schema.query_root_name)
     write_response(path, :mutation, schema.mutation_root_name)
@@ -64,6 +66,10 @@ class GraphQLJavaGen
   def generate_entity(template, type)
     erb_template = erb_for_entity(template)
     reformat(erb_template.result(binding))
+  end
+
+  def write_schema(path)
+    File.write(path + "/Schema.java", reformat(erb_for_entity("Schema.java").result(binding)))
   end
 
   def write_static_methods(path)

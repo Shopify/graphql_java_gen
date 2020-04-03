@@ -18,6 +18,7 @@ task :generate do
     GraphQLSchema.new(Support::Schema.introspection_result),
     package_name: 'com.shopify.graphql.support',
     nest_under: 'Generated',
+    version: '2020-01',
     custom_scalars: [
       GraphQLJavaGen::Scalar.new(
         type_name: 'Time',
@@ -38,6 +39,7 @@ task :generate do
     GraphQLSchema.new(Support::Schema.introspection_result(Support::Schema::MinimalSchema)),
     package_name: 'com.shopify.graphql.support',
     nest_under: 'GeneratedMinimal',
+    version: '2020-01'
   ).save('support/src/test/java/com/shopify/graphql/support/GeneratedMinimal.java')
 end
 

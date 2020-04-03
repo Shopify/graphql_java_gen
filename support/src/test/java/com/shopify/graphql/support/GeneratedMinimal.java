@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public class GeneratedMinimal {
+    public static final String API_VERSION = "2020-01";
+
     public static QueryRootQuery query(QueryRootQueryDefinition queryDef) {
         StringBuilder queryString = new StringBuilder("{");
         QueryRootQuery query = new QueryRootQuery(queryString);
