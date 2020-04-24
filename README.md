@@ -89,12 +89,12 @@ GraphQLJavaGen.new(schema,
 ).save_granular("#{Dir.pwd}/../MyApp/src/main/java/com/example/MyApp/")
 ```
 
-When using the granular option, the `com.example.MyApp` package wil contain many small
+When using the granular option, the `com.example.MyApp` package will contain many small
 class files each containing a single GraphQL schema entity.
 
 ### Generated code
 
-Regarless of whether you use the monolith or granular schema generator, the usage is largely the same.
+Regardless of whether you use the monolith or granular schema generator, the usage is largely the same.
 The only difference depends on whether you access the schema entities directly from the provided package
 or as nested, static classes on the `ExampleSchema` class.
 
