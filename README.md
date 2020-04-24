@@ -25,7 +25,7 @@ The generated code depends on the com.shopify.graphql.support java
 package. This can be added to a gradle project by adding the following
 jCenter dependancy to you `build.gradle` file:
 
-    compile 'com.shopify.graphql.support:support:0.1.1'
+    compile 'com.shopify.graphql.support:support:0.2.0'
 
 ## Usage
 
