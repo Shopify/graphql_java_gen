@@ -1,18 +1,12 @@
 def VERSION_NAME = '0.2.0'
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'signing'
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -34,8 +28,6 @@ test {
         exceptionFormat = 'full'
     }
 }
-
-version = VERSION_NAME
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
@@ -65,60 +57,65 @@ ext {
     licenseName = 'The MIT License'
     licenseUrl = 'https://opensource.org/licenses/MIT'
     allLicenses = ["MIT"]
+
+    author = 'Shopify Inc.'
 }
 
 group = publishedGroupId
+archivesBaseName = artifact
+version = VERSION_NAME
 
-install {
-    repositories.mavenInstaller {
-        // Generates POM.xml with proper parameters
-        pom {
-            project {
-                groupId publishedGroupId
-                artifactId artifact
-
-                name libraryName
-                description libraryDescription
-                url siteUrl
-
-                licenses {
-                    license {
-                        name licenseName
-                        url licenseUrl
-                    }
-                }
-
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
+signing {
+    required { gradle.taskGraph.hasTask("uploadArchives") }
+    def signingKeyId = findProperty("signingKeyId")
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign configurations.archives
 }
 
-bintray {
-    /*
-    These values can be found on https://bintray.com/profile/edit
-    BINTRAY_USER : your personal profile name (from "Your Profile")
-    BINTRAY_KEY : found on the left menu, under "API Key"
-     */
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-    configurations = ['archives']
-    publish = true
-    pkg {
-        userOrg = 'shopify'
-        repo = 'shopify-java'
-        name = libraryName
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        version {
-            name = VERSION_NAME
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: System.getenv("OSSRH_USERNAME"), password: System.getenv("OSSRH_PASSWORD"))
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: System.getenv("OSSRH_USERNAME"), password: System.getenv("OSSRH_PASSWORD"))
+            }
+
+            pom {
+                project {
+                    groupId project.ext.publishedGroupId
+                    artifactId project.ext.artifact
+
+                    name project.ext.libraryName
+                    description project.ext.libraryDescription
+                    url project.ext.siteUrl
+
+                    developers {
+                        developer {
+                            name project.ext.author
+                        }
+                    }
+
+                    licenses {
+                        license {
+                        name project.ext.licenseName
+                        url project.ext.licenseUrl
+                        }
+                    }
+
+                    scm {
+                        connection = project.ext.gitUrl
+                        developerConnection = project.ext.gitUrl
+                        url = project.ext.siteUrl
+                    }
+                }
+            }
         }
     }
 }
