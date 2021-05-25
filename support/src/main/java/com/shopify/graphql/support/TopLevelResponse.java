@@ -11,13 +11,17 @@ import java.util.List;
  */
 public class TopLevelResponse {
     private static final String DATA_KEY = "data";
+    private static final String EXTENSIONS_KEY = "extensions";
     private static final String ERRORS_KEY = "errors";
     private JsonObject data = null;
+    private JsonObject extensions = null;
     private final List<Error> errors = new ArrayList<>();
 
     public TopLevelResponse(JsonObject fields) throws InvalidGraphQLException {
         JsonElement errorsElement = fields.get(ERRORS_KEY);
         JsonElement dataElement = fields.get(DATA_KEY);
+        JsonElement extensionsElement = fields.get(EXTENSIONS_KEY);
+
         if (dataElement != null && dataElement.isJsonNull()) {
             dataElement = null;
         }
@@ -41,6 +45,10 @@ public class TopLevelResponse {
                 errors.add(new Error(error.isJsonObject() ? error.getAsJsonObject() : new JsonObject()));
             }
         }
+
+        if (extensionsElement != null && extensionsElement.isJsonObject()) {
+            extensions = extensionsElement.getAsJsonObject();
+        }
     }
 
     public JsonObject getData() {
@@ -49,5 +57,9 @@ public class TopLevelResponse {
 
     public List<Error> getErrors() {
         return errors;
+    }
+
+    public JsonObject getExtensions() {
+        return extensions;
     }
 }
