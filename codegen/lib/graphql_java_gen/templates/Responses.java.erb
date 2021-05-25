@@ -39,6 +39,10 @@ public class <%= response_type %>Response {
         return response.getErrors();
     }
 
+    public JsonObject getExtensions() {
+      return response.getExtensions();
+    }
+
     public String toJson() {
         return new Gson().toJson(response);
     }

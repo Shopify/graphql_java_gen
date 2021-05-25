@@ -1,14 +1,12 @@
 package com.shopify.graphql.support;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-
+import com.google.gson.Gson;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
+import static org.junit.Assert.*;
 
 public class IntegrationTest {
     @Test
@@ -141,6 +139,28 @@ public class IntegrationTest {
         assertEquals("IntegerEntry", entry.getGraphQlTypeName());
         assertTrue(entry instanceof Generated.IntegerEntry);
         assertEquals(42, ((Generated.IntegerEntry) entry).getValue().intValue());
+    }
+
+    @Test
+    public void testExtensions() throws Exception {
+        String json = "{\"data\":{\"entry_union\":{\"__typename\":\"IntegerEntry\",\"value\":42}}, " +
+                "\"extensions\":{\"cost\":{\"requestedQueryCost\":100, \"actualQueryCost\": 90, " +
+                "\"throttleStatus\": {\"maximumAvailable\": 1000.0, \"currentlyAvailable\": 910, " +
+                "\"restoreRate\": 50}}}}";
+        // does a response parse
+        Generated.QueryResponse qr = Generated.QueryResponse.fromJson(json);
+        // separately parse the top level response for introspection
+        TopLevelResponse tlr = (new Gson()).fromJson(json, TopLevelResponse.class);
+        // check some fields
+        assertNotNull(tlr.getExtensions());
+        assertNotNull(tlr.getExtensions().getAsJsonObject("cost"));
+        assertNotNull(tlr.getExtensions().getAsJsonObject("cost").getAsJsonPrimitive("requestedQueryCost"));
+        assertEquals(100, tlr.getExtensions().getAsJsonObject("cost")
+                .getAsJsonPrimitive("requestedQueryCost").getAsInt());
+        assertNotNull(tlr.getExtensions().getAsJsonObject("cost").getAsJsonObject("throttleStatus"));
+        assertEquals(910, tlr.getExtensions().getAsJsonObject("cost")
+                .getAsJsonObject("throttleStatus")
+                .getAsJsonPrimitive("currentlyAvailable").getAsInt());
     }
 
     @Test
