@@ -301,6 +301,14 @@ class GraphQLJavaGen
     expressions.join(', ')
   end
 
+  def java_directive_required_arg_defs(directive)
+    defs = []
+    directive.required_args.each do |arg|
+      defs << "#{java_input_type(arg.type)} #{escape_reserved_word(arg.camelize_name)}"
+    end
+    defs.join(', ')
+  end
+
   def java_implements(type)
     return "implements #{type.name} " unless type.object?
     interfaces = abstract_types.fetch(type.name)
@@ -352,7 +360,7 @@ class GraphQLJavaGen
         doc << "\n*"
         doc << "\n*"
       else
-        doc << '*'        
+        doc << '*'
       end
       doc << ' @deprecated '
       doc << element.deprecation_reason

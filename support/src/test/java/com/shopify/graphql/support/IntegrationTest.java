@@ -1,7 +1,10 @@
 package com.shopify.graphql.support;
 
+import junit.framework.Assert;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,13 +23,13 @@ public class IntegrationTest {
     @Test
     public void testRequiredArgQuery() throws Exception {
         String queryString = Generated.query(query -> query.string("user:1:name")).toString();
-        assertEquals("{string(key:\"user:1:name\")}", queryString);
+        assertEquals("query {string(key:\"user:1:name\")}", queryString);
     }
 
     @Test
     public void testOptionalArgQuery() throws Exception {
         String queryString = Generated.query(query -> query.keys(10, args -> args.after("cursor"))).toString();
-        assertEquals("{keys(first:10,after:\"cursor\")}", queryString);
+        assertEquals("query {keys(first:10,after:\"cursor\")}", queryString);
     }
 
     @Test
@@ -37,7 +40,7 @@ public class IntegrationTest {
                 .onStringEntry(strEntry -> strEntry.value())
             )
         ).toString();
-        assertEquals("{entry(key:\"user:1\"){__typename,ttl,... on StringEntry{value}}}", queryString);
+        assertEquals("query {entry(key:\"user:1\"){__typename,ttl,... on StringEntry{value}}}", queryString);
     }
 
     @Test
@@ -47,7 +50,7 @@ public class IntegrationTest {
                 .onStringEntry(strEntry -> strEntry.value())
             )
         ).toString();
-        assertEquals("{entry_union(key:\"user:1\"){__typename,... on StringEntry{value}}}", queryString);
+        assertEquals("query {entry_union(key:\"user:1\"){__typename,... on StringEntry{value}}}", queryString);
     }
 
     @Test
@@ -55,13 +58,13 @@ public class IntegrationTest {
         String queryString = Generated.query(query -> query
             .keys(10, args -> args.type(Generated.KeyType.INTEGER))
         ).toString();
-        assertEquals("{keys(first:10,type:INTEGER)}", queryString);
+        assertEquals("query {keys(first:10,type:INTEGER)}", queryString);
     }
 
     @Test
     public void testMutation() throws Exception {
         String queryString = Generated.mutation(mutation -> mutation.setString("foo", "bar")).toString();
-        assertEquals("mutation{set_string(key:\"foo\",value:\"bar\")}", queryString);
+        assertEquals("mutation {set_string(key:\"foo\",value:\"bar\")}", queryString);
     }
 
     @Test
@@ -69,7 +72,7 @@ public class IntegrationTest {
         String queryString = Generated.mutation(mutation -> mutation
             .setInteger(new Generated.SetIntegerInput("answer", 42).setNegate(true))
         ).toString();
-        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42,negate:true})}", queryString);
+        assertEquals("mutation {set_integer(input:{key:\"answer\",value:42,negate:true})}", queryString);
     }
 
     @Test
@@ -78,7 +81,7 @@ public class IntegrationTest {
         String queryString = Generated.mutation(mutation -> mutation
             .setInteger(new Generated.SetIntegerInput("answer", 42).setTtl(ttl))
         ).toString();
-        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42,ttl:\"2017-01-31T10:09:48\"})}", queryString);
+        assertEquals("mutation {set_integer(input:{key:\"answer\",value:42,ttl:\"2017-01-31T10:09:48\"})}", queryString);
     }
 
     @Test
@@ -163,7 +166,7 @@ public class IntegrationTest {
         String queryString = Generated.mutation(mutation -> mutation
             .setInteger(new Generated.SetIntegerInput("answer", 42).setTtl(null))
         ).toString();
-        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42})}", queryString);
+        assertEquals("mutation {set_integer(input:{key:\"answer\",value:42})}", queryString);
     }
 
     @Test
@@ -171,7 +174,7 @@ public class IntegrationTest {
         String queryString = Generated.mutation(mutation -> mutation
           .setInteger(new Generated.SetIntegerInput("answer", 42).setTtlInput(Input.<LocalDateTime>undefined()))
         ).toString();
-        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42})}", queryString);
+        assertEquals("mutation {set_integer(input:{key:\"answer\",value:42})}", queryString);
     }
 
     @Test
@@ -179,7 +182,7 @@ public class IntegrationTest {
         String queryString = Generated.mutation(mutation -> mutation
           .setInteger(new Generated.SetIntegerInput("answer", 42).setTtlInput(Input.<LocalDateTime>value(null)))
         ).toString();
-        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42,ttl:null})}", queryString);
+        assertEquals("mutation {set_integer(input:{key:\"answer\",value:42,ttl:null})}", queryString);
     }
 
     @Test
@@ -187,6 +190,14 @@ public class IntegrationTest {
         String queryString = Generated.mutation(mutation -> mutation
           .setInteger(new Generated.SetIntegerInput("answer", 42).setTtlInput(Input.<LocalDateTime>value(LocalDateTime.of(2017, 1, 31, 10, 9, 48))))
         ).toString();
-        assertEquals("mutation{set_integer(input:{key:\"answer\",value:42,ttl:\"2017-01-31T10:09:48\"})}", queryString);
+        assertEquals("mutation {set_integer(input:{key:\"answer\",value:42,ttl:\"2017-01-31T10:09:48\"})}", queryString);
+    }
+
+    @Test
+    public void testQueryWithDirectives() {
+        List<Directive> directives = new ArrayList<>();
+        directives.add(new Generated.SampleDirective());
+        Generated.QueryRootQuery query = Generated.query(directives, root -> root.integer("productCount"));
+        Assert.assertEquals("query @sample {integer(key:\"productCount\")}", query.toString());
     }
 }
