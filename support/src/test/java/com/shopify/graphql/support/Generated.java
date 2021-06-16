@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,11 +30,25 @@ public class Generated {
     public static final String API_VERSION = "2020-01";
 
     public static QueryRootQuery query(QueryRootQueryDefinition queryDef) {
-        StringBuilder queryString = new StringBuilder("{");
+        return query(Collections.emptyList(), queryDef);
+    }
+
+    public static QueryRootQuery query(List<Directive> directives, QueryRootQueryDefinition queryDef) {
+        StringBuilder queryString = new StringBuilder("query");
+        for (Directive directive : directives) {
+            queryString.append(" " + directive.toString());
+        }
+        queryString.append(" {");
         QueryRootQuery query = new QueryRootQuery(queryString);
         queryDef.define(query);
         queryString.append('}');
         return query;
+    }
+
+    public static class SampleDirective extends Directive {
+        SampleDirective() {
+            super("sample");
+        }
     }
 
     public static class QueryResponse {
@@ -69,7 +84,15 @@ public class Generated {
     }
 
     public static MutationQuery mutation(MutationQueryDefinition queryDef) {
-        StringBuilder queryString = new StringBuilder("mutation{");
+        return mutation(Collections.emptyList(), queryDef);
+    }
+
+    public static MutationQuery mutation(List<Directive> directives, MutationQueryDefinition queryDef) {
+        StringBuilder queryString = new StringBuilder("mutation");
+        for (Directive directive : directives) {
+            queryString.append(" " + directive.toString());
+        }
+        queryString.append(" {");
         MutationQuery query = new MutationQuery(queryString);
         queryDef.define(query);
         queryString.append('}');

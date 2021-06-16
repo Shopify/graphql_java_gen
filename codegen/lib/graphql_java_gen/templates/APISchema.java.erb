@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.shopify.graphql.support.AbstractResponse;
 import com.shopify.graphql.support.Arguments;
+import com.shopify.graphql.support.Directive;
 import com.shopify.graphql.support.Error;
 import com.shopify.graphql.support.Query;
 import com.shopify.graphql.support.SchemaViolationError;
@@ -18,9 +19,7 @@ import com.shopify.graphql.support.Input;
 <% end %>
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class <%= schema_name %> {
     public static final String API_VERSION = "<%= version %>";
@@ -28,11 +27,19 @@ public class <%= schema_name %> {
     <% [[:query, schema.query_root_name], [:mutation, schema.mutation_root_name]].each do |operation_type, root_name| %>
         <% next unless root_name %>
         public static <%= root_name %>Query <%= operation_type %>(<%= root_name %>QueryDefinition queryDef) {
-            StringBuilder queryString = new StringBuilder("<%= operation_type unless operation_type == :query %>{");
-            <%= root_name %>Query query = new <%= root_name %>Query(queryString);
-            queryDef.define(query);
-            queryString.append('}');
-            return query;
+            return <%= operation_type %>(Collections.emptyList(), queryDef);
+        }
+
+        public static <%= root_name %>Query <%= operation_type %>(List<Directive> directives, <%= root_name %>QueryDefinition queryDef) {
+          StringBuilder queryString = new StringBuilder("<%= operation_type %>");
+          for (Directive directive : directives) {
+            queryString.append(" " + directive.toString());
+          }
+          queryString.append(" {");
+          <%= root_name %>Query query = new <%= root_name %>Query(queryString);
+          queryDef.define(query);
+          queryString.append('}');
+          return query;
         }
 
         public static class <%= operation_type.capitalize %>Response {
@@ -66,6 +73,38 @@ public class <%= schema_name %> {
                 return new <%= operation_type.capitalize %>Response(response);
             }
         }
+    <% end %>
+
+    <% schema.directives.select { |directive| !(directive.locations & %w{QUERY MUTATION}).empty? }.each do |directive| %>
+      <%= java_doc(directive) %>
+      public static class <%= directive.classify_name %>Directive extends Directive {
+        <% directive.args.each do |arg| %>
+          public <%= java_input_type(arg.type) %> <%= escape_reserved_word(arg.camelize_name) %>;
+        <% end %>
+
+        public <%= directive.classify_name %>Directive(<%= java_directive_required_arg_defs(directive) %>) {
+          super("<%= directive.name %>");
+        }
+
+        <% unless directive.args.empty? %>
+          @Override
+          public String toString() {
+            StringBuilder _queryBuilder = new StringBuilder(super.toString());
+            _queryBuilder.append("(");
+            <% first_arg = true %>
+            <% directive.args.each do |arg| %>
+              if (<%= escape_reserved_word(arg.camelize_name) %> != null) {
+                <% unless first_arg %>_queryBuilder.append(", ");<% end %>
+                _queryBuilder.append("<%= arg.name %>:");
+                <%= generate_build_input_code(escape_reserved_word(arg.camelize_name), arg.type) %>
+              }
+              <% first_arg = false %>
+            <% end %>
+            _queryBuilder.append(")");
+            return _queryBuilder.toString();
+          }
+        <% end %>
+      }
     <% end %>
 
     <% schema.types.reject{ |type| type.name.start_with?('__') || type.scalar? }.each do |type| %>
