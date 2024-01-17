@@ -83,7 +83,7 @@ class GraphQLJavaGen
   end
 
   def write_entities(path)
-    schema.types.reject{ |type| type.name.start_with?('__') || type.scalar? }.each do |type|
+    schema.types.reject{ |type| skip_type?(type) }.each do |type|
       case type.kind when 'OBJECT', 'INTERFACE', 'UNION'
                        File.write(path + "/#{type.name}QueryDefinition.java", generate_entity("QueryDefinition.java", type))
                        File.write(path + "/#{type.name}Query.java", generate_entity("Query.java", type))
@@ -146,9 +146,20 @@ class GraphQLJavaGen
   ]
   private_constant :RESERVED_WORDS
 
+
   def escape_reserved_word(word)
     return word unless RESERVED_WORDS.include?(word)
     "#{word}Value"
+  end
+
+  INTROSPECTION_TYPES = [
+    "InContextAnnotation",
+    "InContextAnnotationType"
+  ]
+  private_constant :INTROSPECTION_TYPES
+
+  def skip_type?(type)
+    type.name.start_with?('__') || type.scalar? || INTROSPECTION_TYPES.include?(type.name)
   end
 
   def reformat(code)
