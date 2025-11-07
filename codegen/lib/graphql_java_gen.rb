@@ -47,7 +47,7 @@ class GraphQLJavaGen
     private
 
     def erb_for(template_filename)
-      erb = ERB.new(File.read(template_filename), nil, '-')
+      erb = ERB.new(File.read(template_filename), trim_mode: '-')
       erb.filename = template_filename
       erb
     end
@@ -58,7 +58,7 @@ class GraphQLJavaGen
 
   def erb_for_entity(template)
     template_filename = File.expand_path("../graphql_java_gen/templates/#{template}.erb", __FILE__)
-    erb = ERB.new(File.read(template_filename), nil, '-')
+    erb = ERB.new(File.read(template_filename), trim_mode: '-')
     erb.filename = template_filename
     erb
   end
