@@ -20,10 +20,9 @@ gem 'graphql_java_gen'
 And then execute:
 
     $ bundle
-
 The generated code depends on the com.shopify.graphql.support java
 package. This can be added to a gradle project by adding the following
-dependancy to you `build.gradle` file:
+dependency to your `build.gradle` file:
 
     implementation 'com.shopify.graphql.support:support:0.2.1'
 
